@@ -1,0 +1,73 @@
+plugins {
+    id 'java'
+    id "com.github.davidmc24.gradle.plugin.avro" version "1.7.0"
+    id "com.github.node-gradle.node" version "3.5.1"
+}
+
+group 'com.lavro'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://clojars.org/repo/"
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation "org.apache.avro:avro:1.11.1"
+    implementation "com.github.javafaker:javafaker:1.0.2"
+    implementation(project(":schemas"))
+    implementation(project(":custom-conversions"))
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+//task generateProtocol(type: GenerateAvroProtocolTask) {
+//    shouldRunAfter "build"
+//    source file("src/main/avro")
+//    include("**/*.avdl")
+//    outputDir = file("build/generated-main-avro-avpr")
+//}
+//
+//task generateSchema(type: GenerateAvroSchemaTask){
+//    shouldRunAfter "build"
+//    source file("build/generated-main-avro-avpr")
+//    include("**/*.avpr")
+//    outputDir = file("build/generated-main-avro-avsc")
+//}
+
+//task generateSchema(type: GenerateAvroSchemaTask){
+//    dependsOn(GenerateAvroProtocolTask)
+//    source file("build/generated-main-avro-avpr")
+//    include("**/*.avpr")
+//    outputDir = file("build/generated-main-avro-avsc")
+////    mustRunAfter tasks.withType(GenerateAvroProtocolTask)
+//}
+
+//tasks.register("generateSchema2", GenerateAvroSchemaTask) {
+//    dependsOn generateProtocol
+//    source file("build/generated-avro-main-avpr")
+//    include("**/*.avpr")
+//    outputDir = file("build/generated-main-avro-avsc")
+//}
+
+//avro {
+//    enableDecimalLogicalType = false
+//    stringType = "CharSequence"
+//    conversionsAndTypeFactoriesClasspath.from(configurations.customConversions)
+//    logicalTypeFactoryClassNames.put("reversed", "com.lavro.ReversedLogicalTypeFactory")
+//    customConversionClassNames.add("com.lavro.ReversedConversion")
+//}
+
+//task generateAvrodoc(type: NpxTask) {
+//    dependsOn(generateSchema)
+//    command = '@mikaello/avrodoc-plus'
+//    args = ['-i','build/generated-main-avro-avsc', '-o','index.html']
+//    mustRunAfter tasks.withType(GenerateAvroJavaTask)
+//}
