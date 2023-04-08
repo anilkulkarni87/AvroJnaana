@@ -2,8 +2,8 @@
 ## Badges
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
-[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+[![Java CI with Gradle](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml/badge.svg)](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml)
+
 
 
 # Apache Avro - Schemas and Custom LogicalTypes
@@ -147,6 +147,13 @@ Some of the questions it will help answer right away:
 ## Authors
 
 - [@anilkulkarni](https://github.com/anilkulkarni87)
+
+
+## Acknowledgements
+
+ - [Awesome Readme Templates](https://readme.so/)
+ - [Avrodoc Plus](https://github.com/mikaello/avrodoc-plus)
+ - [Gradle Avro Plugin](https://github.com/davidmc24/gradle-avro-plugin)
 
 
 ## 🔗 Links

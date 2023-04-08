@@ -6,5 +6,6 @@ protocol Example{
 		string queryAuthor;
 		@logicalType("encrypted")
 		string secretName;
+		string queryEngine;
 	}
 }
