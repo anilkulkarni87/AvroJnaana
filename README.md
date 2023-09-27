@@ -42,6 +42,9 @@ Some of the questions it will help answer right away:
 - How to define a Custom Logical type and package it?
 - How do we maintain our schemas?
 - Better way of sharing schemas with other team members?
+- How can we write complex schemas easily?
+- How can schemas be made reusable?
+
 ## Schemas Used
 
 - QueryRecord schema
@@ -50,7 +53,8 @@ Some of the questions it will help answer right away:
 - CustomerObjectModel
 
   My take on a generic Customer Model of a retail store.
-## Usage/Examples
+
+## Build project
 
 - Clone the repo
 - Build project
@@ -68,6 +72,8 @@ Some of the questions it will help answer right away:
 
 - Run `QueryRecordOutput.java` and verify the logs.
 
+## Testing with Kafka
+Read more at [Test with Kafka](./kafka.md)
 
 
 ## Directory Tree
@@ -131,13 +137,16 @@ Some of the questions it will help answer right away:
 
 ## Roadmap
 
-- Add Github workflow
-- Add unit tests for Conversions
-- Publish To Kafka topic
-- Add spotless or checkstyle plugins
-- Fix for fields which are union logicaltype and null
-- Schema evolution
-- Keep the README.md updated
+- [ ] Add Github workflow
+- [ ] Add unit tests for Conversions
+- [x] Publish To Kafka topic
+- [ ] Add spotless or checkstyle plugins
+- [ ] Fix for fields which are union logicaltype and null
+- [ ] Schema evolution
+- [ ] Keep the README.md updated
+
+
+![Complete flow](./docs/ecommerce.png)
 
 ## Tech Stack
 
