@@ -1,0 +1,17 @@
+@namespace("com.dataanada.customer")
+protocol Customer{
+	record CustomerRecord {
+		int customerId;
+		@logicalType("encrypted")
+		string firstName;
+		@logicalType("encrypted")
+		string lastName;
+        @logicalType("encrypted")
+        string email;
+		string addressLine1;
+        string city;
+        string state;
+        int zip;
+        string country;
+	}
+}

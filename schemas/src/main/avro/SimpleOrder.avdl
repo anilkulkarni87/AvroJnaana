@@ -1,0 +1,10 @@
+@namespace("com.dataanada.order")
+protocol Order{
+	record OrderRecord {
+		int orderId;
+		union {null, int} storeId = null;
+		int customerId;
+        decimal(5,2) price;
+        string orderType;
+	}
+}

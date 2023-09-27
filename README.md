@@ -1,12 +1,12 @@
 
-## Badges
+# Apache Avro - Schemas and Custom LogicalTypes
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Java CI with Gradle](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml/badge.svg)](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/anilkulkarni87/AvroJnaana/main)
+![GitHub Repo stars](https://img.shields.io/github/stars/anilkulkarni87/AvroJnaana?style=social)
 
 
-
-# Apache Avro - Schemas and Custom LogicalTypes
 
 ### AvroJnaana: 
     This name combines "Avro" and "Jnaana" (meaning "knowledge" or "wisdom" in Sanskrit) 
@@ -16,12 +16,14 @@ This is a companion code repo for the Apache Avro series of articles. The articl
 
 - Custom Logical Types
 - Apache Avro Schemas
+    - QueryRecord
+    - CustomerObjectModel
 - Building Avrodoc via gradle
 - Writing to Avro using Java Faker
 
 Here is the link to the Avrodoc of the schemas that the repo currently has:
 
-### [Avrodoc](avrodoc.html)
+### [Avrodoc](avrodoc.html){:target="_blank"}
 
 
 
@@ -135,7 +137,7 @@ Some of the questions it will help answer right away:
 - Add spotless or checkstyle plugins
 - Fix for fields which are union logicaltype and null
 - Schema evolution
-- Keep the Readme.md updated
+- Keep the README.md updated
 
 ## Tech Stack
 
