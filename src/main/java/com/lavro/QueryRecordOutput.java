@@ -27,6 +27,7 @@ public class QueryRecordOutput {
                         .setQueryId(faker.idNumber().ssnValid())
                         .setQueryAuthor(faker.book().author())
                         .setSecretName(faker.number().digits(4))
+                        .setQueryEngine(faker.name().username())
                         .build();
                 dataFileWriter.append(queryRecord);
             }
@@ -52,6 +53,7 @@ public class QueryRecordOutput {
                 System.out.println("Query ID        : " + query.getQueryId());
                 System.out.println("Query Author    : " + query.getQueryAuthor());
                 System.out.println("Secret Name     : " + query.getSecretName());
+                System.out.println("Engine Name     : " + query.getQueryEngine());
             }
         } catch (IOException e) {
             e.printStackTrace();

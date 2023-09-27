@@ -7,7 +7,11 @@ plugins {
     id 'java'
     id "com.github.davidmc24.gradle.plugin.avro" version "1.7.0"
     id "com.github.node-gradle.node" version "3.5.1"
+    id 'scala'
+    id 'com.zlad.gradle.avrohugger' version '0.7.0'
 }
+
+apply plugin: "com.github.davidmc24.gradle.plugin.avro-base"
 
 group 'com.lavro'
 version '1.0-SNAPSHOT'
@@ -26,6 +30,7 @@ dependencies {
     customConversions(project(":custom-conversions"))
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'org.scala-lang:scala-library:2.13.10'
     implementation "org.apache.avro:avro:1.11.1"
     implementation "com.github.javafaker:javafaker:1.0.2"
     implementation(project(":custom-conversions"))
@@ -37,24 +42,41 @@ test {
     useJUnitPlatform()
 }
 
-task generateProtocol(type: GenerateAvroProtocolTask) {
-    shouldRunAfter "build"
+//task generateProtocol(type: GenerateAvroProtocolTask) {
+//    shouldRunAfter "build"
+//    source file("src/main/avro")
+//    include("**/*.avdl")
+//    outputDir = file("build/generated-main-avro-avpr")
+//}
+
+def generateProtocol = tasks.register("generateProtocol", GenerateAvroProtocolTask) {
+    shouldRunAfter("build")
     source file("src/main/avro")
     include("**/*.avdl")
     outputDir = file("build/generated-main-avro-avpr")
 }
 
-task generateSchema(type: GenerateAvroSchemaTask){
-    shouldRunAfter "build"
-    shouldRunAfter "generateProtocol"
+def generateSchema=tasks.register("generateSchema", GenerateAvroSchemaTask) {
+//    shouldRunAfter("GenerateAvroProtocolTask")
+    dependsOn generateProtocol
+    source file("src/main/avro")
     source file("build/generated-main-avro-avpr")
     include("**/*.avpr")
     outputDir = file("build/generated-main-avro-avsc")
 }
 
+//task generateSchema(type: GenerateAvroSchemaTask){
+//    shouldRunAfter "build"
+//    shouldRunAfter "generateProtocol"
+//    source file("build/generated-main-avro-avpr")
+//    include("**/*.avpr")
+//    outputDir = file("build/generated-main-avro-avsc")
+//}
+
 avro {
     enableDecimalLogicalType = false
     stringType = "CharSequence"
+    createSetters = true
     conversionsAndTypeFactoriesClasspath.from(configurations.customConversions)
     logicalTypeFactoryClassNames.put("reversed", "com.lavro.ReversedLogicalTypeFactory")
     customConversionClassNames.add("com.lavro.ReversedConversion")
@@ -62,9 +84,32 @@ avro {
     customConversionClassNames.add("com.lavro.EncryptedConversion")
 }
 
-task generateAvrodoc(type: NpxTask) {
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+avrohugger {
+    sourceDirectories = files('src/main/avro')
+    destinationDirectory = file('src/main/scala')
+    typeMapping {
+        protocolType = ScalaADT
+    }
+    sourceFormat = Standard
+}
+
+tasks.register("generateAvrodoc", NpxTask) {
+    shouldRunAfter("generateSchema")
     dependsOn(generateSchema)
     command = '@mikaello/avrodoc-plus'
-    args = ['-i','build/generated-main-avro-avsc', '-o','../avrodoc.html']
+    args = ['-i','build/generated-main-avro-avsc', '-o','../docs/avrodoc/avrodoc.html']
     mustRunAfter tasks.withType(GenerateAvroJavaTask)
 }
+
+//task generateAvrodoc(type: NpxTask) {
+//    dependsOn(generateSchema)
+//    command = '@mikaello/avrodoc-plus'
+//    args = ['-i','build/generated-main-avro-avsc', '-o','../docs/avrodoc/avrodoc.html']
+//    mustRunAfter tasks.withType(GenerateAvroJavaTask)
+//}
+
+//tasks.named("generateProtocol") { finalizedBy("generateSchema") }

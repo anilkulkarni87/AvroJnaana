@@ -1,12 +1,12 @@
 
-## Badges
+# Apache Avro - Schemas and Custom LogicalTypes
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Java CI with Gradle](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml/badge.svg)](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/anilkulkarni87/AvroJnaana/main)
+![GitHub Repo stars](https://img.shields.io/github/stars/anilkulkarni87/AvroJnaana?style=social)
 
 
-
-# Apache Avro - Schemas and Custom LogicalTypes
 
 ### AvroJnaana: 
     This name combines "Avro" and "Jnaana" (meaning "knowledge" or "wisdom" in Sanskrit) 
@@ -16,12 +16,14 @@ This is a companion code repo for the Apache Avro series of articles. The articl
 
 - Custom Logical Types
 - Apache Avro Schemas
+    - QueryRecord
+    - CustomerObjectModel
 - Building Avrodoc via gradle
 - Writing to Avro using Java Faker
 
 Here is the link to the Avrodoc of the schemas that the repo currently has:
 
-### [Avrodoc](avrodoc.html)
+### [Avrodoc](avrodoc.html){:target="_blank"}
 
 
 
@@ -40,6 +42,9 @@ Some of the questions it will help answer right away:
 - How to define a Custom Logical type and package it?
 - How do we maintain our schemas?
 - Better way of sharing schemas with other team members?
+- How can we write complex schemas easily?
+- How can schemas be made reusable?
+
 ## Schemas Used
 
 - QueryRecord schema
@@ -48,7 +53,8 @@ Some of the questions it will help answer right away:
 - CustomerObjectModel
 
   My take on a generic Customer Model of a retail store.
-## Usage/Examples
+
+## Build project
 
 - Clone the repo
 - Build project
@@ -66,6 +72,8 @@ Some of the questions it will help answer right away:
 
 - Run `QueryRecordOutput.java` and verify the logs.
 
+## Testing with Kafka
+Read more at [Test with Kafka](./kafka.md)
 
 
 ## Directory Tree
@@ -129,13 +137,16 @@ Some of the questions it will help answer right away:
 
 ## Roadmap
 
-- Add Github workflow
-- Add unit tests for Conversions
-- Publish To Kafka topic
-- Add spotless or checkstyle plugins
-- Fix for fields which are union logicaltype and null
-- Schema evolution
-- Keep the Readme.md updated
+- [ ] Add Github workflow
+- [ ] Add unit tests for Conversions
+- [x] Publish To Kafka topic
+- [ ] Add spotless or checkstyle plugins
+- [ ] Fix for fields which are union logicaltype and null
+- [ ] Schema evolution
+- [ ] Keep the README.md updated
+
+
+![Complete flow](./docs/ecommerce.png)
 
 ## Tech Stack
 
