@@ -23,7 +23,7 @@ This is a companion code repo for the Apache Avro series of articles. The articl
 
 Here is the link to the Avrodoc of the schemas that the repo currently has:
 
-### [Avrodoc](avrodoc.html){:target="_blank"}
+### [Avrodoc](./docs/avrodoc/avrodoc.html){:target="_blank"}
 
 
 
