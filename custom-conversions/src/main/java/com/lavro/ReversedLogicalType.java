@@ -29,4 +29,3 @@ public class ReversedLogicalType extends LogicalType {
 //        }
 //    }
 }
-

@@ -7,8 +7,6 @@ plugins {
     id 'java'
     id "com.github.davidmc24.gradle.plugin.avro" version "1.7.0"
     id "com.github.node-gradle.node" version "3.5.1"
-    id 'scala'
-    id 'com.zlad.gradle.avrohugger' version '0.7.0'
 }
 
 apply plugin: "com.github.davidmc24.gradle.plugin.avro-base"
@@ -21,6 +19,9 @@ repositories {
     maven {
         url "https://clojars.org/repo/"
     }
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
 }
 configurations {
     customConversions
@@ -32,7 +33,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'org.scala-lang:scala-library:2.13.10'
     implementation "org.apache.avro:avro:1.11.1"
-    implementation "com.github.javafaker:javafaker:1.0.2"
+    // https://mvnrepository.com/artifact/io.confluent/kafka-schema-registry
+    implementation 'io.confluent:kafka-schema-registry:7.5.1'
     implementation(project(":custom-conversions"))
     implementation(project(":custom-conversions"))
 
@@ -88,14 +90,6 @@ jar {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
 
-avrohugger {
-    sourceDirectories = files('src/main/avro')
-    destinationDirectory = file('src/main/scala')
-    typeMapping {
-        protocolType = ScalaADT
-    }
-    sourceFormat = Standard
-}
 
 tasks.register("generateAvrodoc", NpxTask) {
     shouldRunAfter("generateSchema")
