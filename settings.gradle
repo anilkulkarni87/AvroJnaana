@@ -1,4 +1,3 @@
 rootProject.name = 'AvroJnaana'
-include 'custom-conversions'
-include 'schemas'
-
+include'custom-conversions'
+include'schemas'

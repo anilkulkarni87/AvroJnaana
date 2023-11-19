@@ -21,11 +21,11 @@ public class EncryptedConversion extends Conversion<CharSequence> {
     private static SecretKey secretKey;
     private static IvParameterSpec iv;
 
-    public EncryptedConversion()  {
+    public EncryptedConversion() {
         this(DEFAULT_KEY, DEFAULT_IV);
     }
 
-    public EncryptedConversion(byte[] key, byte[] iv){
+    public EncryptedConversion(byte[] key, byte[] iv) {
         this.secretKey = new SecretKeySpec(key, "AES");
         this.iv = new IvParameterSpec((Arrays.copyOf(iv, 16)));
     }
@@ -78,7 +78,7 @@ public class EncryptedConversion extends Conversion<CharSequence> {
         try {
 //            String plaintext = Base64.getEncoder().encodeToString(value.array());
             String encrypted = encrypt(String.valueOf(value));
-            System.out.println("When writing to Avro ToByteBuffer is :"+encrypted.toString());
+            System.out.println("When writing to Avro ToByteBuffer is :" + encrypted.toString());
             return encrypted;
         } catch (Exception e) {
             throw new RuntimeException("Error encrypting value", e);
@@ -90,7 +90,7 @@ public class EncryptedConversion extends Conversion<CharSequence> {
         try {
 //            String encryptedText = Base64.getEncoder().encodeToString(bytes.array());
             String decryptedText = decrypt((String.valueOf(bytes)));
-            System.out.println("When reading from the avro file FromByteBuffer is :"+decryptedText);
+            System.out.println("When reading from the avro file FromByteBuffer is :" + decryptedText);
             return decryptedText;
         } catch (Exception e) {
             throw new RuntimeException("Error decrypting value", e);
