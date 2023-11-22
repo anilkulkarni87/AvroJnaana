@@ -1,0 +1,41 @@
+{
+  "type" : "record",
+  "name" : "CustomerContactPreference",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "This object should provide for the customer Contact Preferences\nMaybe we should add a source field here.",
+  "fields" : [ {
+    "name" : "customerId",
+    "type" : "string",
+    "doc" : "Id assigned by Retail store to customers"
+  }, {
+    "name" : "emailPreference",
+    "type" : "string",
+    "doc" : "Email preference of the customer Opt-in or Opt-out"
+  }, {
+    "name" : "phonePreference",
+    "type" : "string",
+    "doc" : "Phone preference of the customer"
+  }, {
+    "name" : "dataRetentionPeriod",
+    "type" : "string",
+    "doc" : "Data retention period"
+  }, {
+    "name" : "consentDetails",
+    "type" : "string",
+    "doc" : "Consent details on Allow use to personal data and others."
+  }, {
+    "name" : "createdDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was created"
+  }, {
+    "name" : "updatedDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was updated"
+  } ]
+}

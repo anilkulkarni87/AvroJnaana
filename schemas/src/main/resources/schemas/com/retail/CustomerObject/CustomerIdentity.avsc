@@ -1,0 +1,86 @@
+{
+  "type" : "record",
+  "name" : "CustomerIdentity",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "Attributes which identify the customer within Retail store",
+  "fields" : [ {
+    "name" : "customerId",
+    "type" : "string",
+    "doc" : "Id assigned by company to customers"
+  }, {
+    "name" : "firstName",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    },
+    "doc" : "First name of the customer. This will be encrypted"
+  }, {
+    "name" : "middleName",
+    "type" : [ "null", {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    } ],
+    "doc" : "Middle name of the customer. This will be encrypted"
+  }, {
+    "name" : "lastName",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    },
+    "doc" : "Last name of the customer. This will be encrypted"
+  }, {
+    "name" : "prefix",
+    "type" : [ "null", "string" ],
+    "doc" : "Prefix for the name. This can be encrypted"
+  }, {
+    "name" : "suffix",
+    "type" : [ "null", "string" ],
+    "doc" : "Suffix for the name. This can be encrypted"
+  }, {
+    "name" : "gender",
+    "type" : [ "null", "string" ],
+    "doc" : "Gender of the customer. This can either be derived or collected.",
+    "default" : null
+  }, {
+    "name" : "emailId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    },
+    "doc" : "Email id for the customer\nCan be validated for format."
+  }, {
+    "name" : "phoneNumber",
+    "type" : [ "null", {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    } ],
+    "doc" : "Phone number for the customer. This can be optional\nWhat is the SOURCE:\nWhat cleansing rules should we apply or is this already by our SOURCE?"
+  }, {
+    "name" : "isEmployee",
+    "type" : [ "null", "string" ],
+    "doc" : "A flag to identify if the customer is an employee"
+  }, {
+    "name" : "customerSource",
+    "type" : {
+      "type" : "enum",
+      "name" : "CustomerSource",
+      "doc" : "Customer Source\n\n\tPHYGITAL -  In store POS\n\n\tDIGITAL - Online\n\n\tMARKETPLACE - Marketplace",
+      "symbols" : [ "PHYGITAL", "DIGITAL", "MARKETPLACE" ]
+    },
+    "doc" : "customer source - phygital, digital, marketplace etc"
+  }, {
+    "name" : "createdDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was created"
+  }, {
+    "name" : "updatedDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was updated"
+  } ]
+}

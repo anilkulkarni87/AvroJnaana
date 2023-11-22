@@ -49,7 +49,7 @@ public class EncryptedConversion extends Conversion<CharSequence> {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getIV());
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-        int padding_len = cipher.getBlockSize() - (new_data.length % cipher.getBlockSize());
+        int padding_len = cipher.getBlockSize() - new_data.length % cipher.getBlockSize();
         byte[] padding = new byte[padding_len];
         for (int i = 0; i < padding_len; i++) {
             padding[i] = (byte) padding_len;
@@ -62,12 +62,18 @@ public class EncryptedConversion extends Conversion<CharSequence> {
     }
 
     public static String decrypt(String encryptedData) throws Exception {
+        if(encryptedData == null){
+            return null;
+        }
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getIV());
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
+
         byte[] encrypted = Base64.getDecoder().decode(encryptedData);
+
         byte[] decrypted = cipher.doFinal(encrypted);
+
         int padding_len = decrypted[decrypted.length - 1];
         byte[] unpadded_data = new byte[decrypted.length - padding_len];
         System.arraycopy(decrypted, 0, unpadded_data, 0, unpadded_data.length);
@@ -76,7 +82,9 @@ public class EncryptedConversion extends Conversion<CharSequence> {
 
     public String toCharSequence(CharSequence value, Schema schema, LogicalType type) {
         try {
-//            String plaintext = Base64.getEncoder().encodeToString(value.array());
+            System.out.println(value);
+            System.out.println(schema);
+            System.out.println(type);
             String encrypted = encrypt(String.valueOf(value));
             System.out.println("When writing to Avro ToByteBuffer is :" + encrypted.toString());
             return encrypted;
@@ -88,7 +96,9 @@ public class EncryptedConversion extends Conversion<CharSequence> {
     @Override
     public CharSequence fromCharSequence(CharSequence bytes, Schema schema, LogicalType type) {
         try {
-//            String encryptedText = Base64.getEncoder().encodeToString(bytes.array());
+            System.out.println(bytes);
+            System.out.println(schema);
+            System.out.println(type);
             String decryptedText = decrypt((String.valueOf(bytes)));
             System.out.println("When reading from the avro file FromByteBuffer is :" + decryptedText);
             return decryptedText;

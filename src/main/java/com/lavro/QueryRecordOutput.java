@@ -7,6 +7,7 @@ import net.datafaker.Faker;
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumReader;
@@ -17,8 +18,9 @@ public class QueryRecordOutput {
   public static void main(String[] args) {
     Faker faker = new Faker();
     Schema schema = QueryRecord.getClassSchema();
+//    System.out.println(schema.getField("testField").schema());
 
-    final DatumWriter<QueryRecord> datumWriter = new SpecificDatumWriter<>(QueryRecord.class);
+    final DatumWriter<QueryRecord> datumWriter = new SpecificDatumWriter<>();
 
     try (DataFileWriter<QueryRecord> dataFileWriter = new DataFileWriter<>(datumWriter)) {
       dataFileWriter.create(schema, new File("query.avro"));
@@ -28,6 +30,7 @@ public class QueryRecordOutput {
             .setQueryAuthor(faker.book().author())
             .setSecretName(faker.number().digits(4))
             .setQueryEngine(faker.name().username())
+//            .setTestField(faker.animal().name())
             .build();
         dataFileWriter.append(queryRecord);
       }
@@ -54,6 +57,7 @@ public class QueryRecordOutput {
         System.out.println("Query Author    : " + query.getQueryAuthor());
         System.out.println("Secret Name     : " + query.getSecretName());
         System.out.println("Engine Name     : " + query.getQueryEngine());
+//        System.out.println("Test Field     : " + query.getTestField());
       }
     } catch (IOException e) {
       e.printStackTrace();

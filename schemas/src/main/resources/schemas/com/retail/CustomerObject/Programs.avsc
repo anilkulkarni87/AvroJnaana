@@ -1,0 +1,7 @@
+{
+  "type" : "enum",
+  "name" : "Programs",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "Programs\n\n\tHIGHTIER - High Tier Customers\n\n\tLEADER - Leads communities for the company\n\n\tLOYALTY - Another loyalty program",
+  "symbols" : [ "HIGHTIER", "LEADER", "LOYALTY" ]
+}

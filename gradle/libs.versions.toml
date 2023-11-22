@@ -1,0 +1,43 @@
+[versions]
+org-junit-jupiter = "5.10.0"
+org-slf4j = "2.0.9"
+javax-crypto="1.0.5"
+davidmc24-gradle-plugin-gradle-avro-plugin="1.9.1"
+checkstyle="10.12.5"
+confluent-kafka-avro-serializer="5.3.0"
+confluent-kafka-schema-registry="7.5.1"
+datafaker="1.7.0"
+apache-avro="1.11.2"
+apache-kafka-kafka-clients="3.6.0"
+logging-log4j-log4j-core="2.17.1"
+
+
+ben-manes-versions="0.50.0"
+kafka-schema-registry-gradle-plugin="1.12.0"
+gradle-node="7.0.1"
+littlerobots-version-catalog-update="0.8.1"
+rewrite="6.5.4"
+
+[libraries]
+clojure-interop-javax-crypto = { module = "clojure-interop:javax.crypto", version.ref="javax-crypto" }
+com-github-davidmc24-gradle-plugin-gradle-avro-plugin = {module="com.github.davidmc24.gradle.plugin:gradle-avro-plugin", version.ref="davidmc24-gradle-plugin-gradle-avro-plugin"}
+com-puppycrawl-tools-checkstyle = {module="com.puppycrawl.tools:checkstyle", version.ref="checkstyle"}
+io-confluent-kafka-avro-serializer = {module="io.confluent:kafka-avro-serializer", version.ref="confluent-kafka-avro-serializer"}
+io-confluent-kafka-schema-registry = {module="io.confluent:kafka-schema-registry", version.ref="confluent-kafka-schema-registry"}
+net-datafaker = {module="net.datafaker:datafaker", version.ref="datafaker"}
+org-apache-avro = {module="org.apache.avro:avro", version.ref="apache-avro"}
+org-apache-kafka-kafka-clients = {module="org.apache.kafka:kafka-clients", version.ref="apache-kafka-kafka-clients"}
+org-apache-logging-log4j-log4j-core = {module="org.apache.logging.log4j:log4j-core", version.ref="logging-log4j-log4j-core"}
+org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "org-junit-jupiter" }
+org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-jupiter" }
+org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
+org-slf4j-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "org-slf4j" }
+
+[plugins]
+com-github-ben-manes-versions = {id="com.github.ben-manes.versions",version.ref="ben-manes-versions"}
+com-github-davidmc24-gradle-plugin-avro = {id="com.github.davidmc24.gradle.plugin.avro",version.ref="davidmc24-gradle-plugin-gradle-avro-plugin"}
+com-github-davidmc24-gradle-plugin-avro-base = {id="com.github.davidmc24.gradle.plugin.avro-base",version.ref="davidmc24-gradle-plugin-gradle-avro-plugin"}
+com-github-imflog-kafka-schema-registry-gradle-plugin = {id="com.github.imflog.kafka-schema-registry-gradle-plugin",version.ref="kafka-schema-registry-gradle-plugin"}
+com-github-node-gradle-node = {id="com.github.node-gradle.node",version.ref="gradle-node"}
+nl-littlerobots-version-catalog-update = {id="nl.littlerobots.version-catalog-update",version.ref="littlerobots-version-catalog-update"}
+org-openrewrite-rewrite = {id="org.openrewrite.rewrite",version.ref="rewrite"}

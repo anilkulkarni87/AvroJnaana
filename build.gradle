@@ -1,63 +1,54 @@
 plugins{
     id'java'
-    id"com.github.davidmc24.gradle.plugin.avro" version"1.7.0"
-    id"com.github.node-gradle.node" version"3.5.1"
+    alias(libs.plugins.com.github.davidmc24.gradle.plugin.avro)
+    alias(libs.plugins.com.github.node.gradle.node)
     id'checkstyle'
-    id("org.openrewrite.rewrite") version("6.5.4")
-    id"com.github.imflog.kafka-schema-registry-gradle-plugin" version"1.12.0"
+    alias(libs.plugins.org.openrewrite.rewrite)
+    alias(libs.plugins.com.github.imflog.kafka.schema.registry.gradle.plugin)
+    alias(libs.plugins.com.github.ben.manes.versions)
+    alias(libs.plugins.nl.littlerobots.version.catalog.update)
 }
 
 group'com.lavro'
 version'1.0-SNAPSHOT'
 
-repositories{
-    mavenCentral()
-    maven{
-        url"https://clojars.org/repo/"
-    }
-    maven{
-        url"https://packages.confluent.io/maven"
-    }
-}
 
 dependencies{
-    testImplementation'org.junit.jupiter:junit-jupiter-api:5.10.0'
-    testRuntimeOnly'org.junit.jupiter:junit-jupiter-engine:5.10.0'
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    implementation'org.slf4j:slf4j-api:2.0.9'
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    implementation'org.slf4j:slf4j-simple:2.0.9'
-    implementation"org.apache.avro:avro:1.11.1"
-    // https://mvnrepository.com/artifact/net.datafaker/datafaker
-    implementation'net.datafaker:datafaker:1.7.0'
+    testRuntimeOnly libs.org.junit.jupiter.junit.jupiter.engine
+    testImplementation libs.org.junit.jupiter.junit.jupiter.api
+
+    implementation libs.org.slf4j.slf4j.api
+    implementation libs.org.slf4j.slf4j.simple
+    implementation libs.org.apache.avro
+    implementation libs.net.datafaker
 
     implementation(project(":schemas"))
     implementation(project(":custom-conversions"))
-    implementation'org.apache.kafka:kafka-clients:3.5.1'
-    // https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer
-    implementation'io.confluent:kafka-avro-serializer:5.3.0'
-    rewrite("org.openrewrite.recipe:rewrite-static-analysis:1.1.0")
+
+    implementation libs.org.apache.kafka.kafka.clients
+    implementation libs.io.confluent.kafka.avro.serializer
+//    rewrite("org.openrewrite.recipe:rewrite-static-analysis:1.1.0")
 
 
 }
 
-def rewriteRunTask = tasks.named("rewriteRun")
+//def rewriteRunTask = tasks.named("rewriteRun")
 
 test{
     useJUnitPlatform()
 }
 
-rewrite{
-    activeRecipe("org.openrewrite.staticanalysis.CodeCleanup")
-}
+//rewrite{
+//    activeRecipe("org.openrewrite.staticanalysis.CodeCleanup")
+//}
 checkstyle{
-    toolVersion'10.12.5'
+    toolVersion = libs.versions.checkstyle.get()
     configFile(file("config/checkstyle/checkstyle.xml"))
 }
 
 
 tasks.withType(Checkstyle) {
-    dependsOn(rewriteRunTask)
+//    dependsOn(rewriteRunTask)
     reports{
         xml.required = true
         html.required = true
@@ -81,4 +72,3 @@ schemaRegistry{
         subject("customerrecord", "schemas/build/generated-main-avro-avsc/com/dataanada/customer/CustomerRecord.avsc", "AVRO")
     }
 }
-

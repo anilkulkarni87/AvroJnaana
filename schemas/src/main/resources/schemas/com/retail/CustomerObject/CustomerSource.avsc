@@ -1,0 +1,7 @@
+{
+  "type" : "enum",
+  "name" : "CustomerSource",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "Customer Source\n\n\tPHYGITAL -  In store POS\n\n\tDIGITAL - Online\n\n\tMARKETPLACE - Marketplace",
+  "symbols" : [ "PHYGITAL", "DIGITAL", "MARKETPLACE" ]
+}

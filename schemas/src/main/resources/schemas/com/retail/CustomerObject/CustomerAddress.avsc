@@ -1,0 +1,68 @@
+{
+  "type" : "record",
+  "name" : "CustomerAddress",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "Attributes which provide the customer address within Retail store.",
+  "fields" : [ {
+    "name" : "customerId",
+    "type" : "string",
+    "doc" : "Id assigned by Retail store to customers"
+  }, {
+    "name" : "addressLine1",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    },
+    "doc" : "Address Line 1"
+  }, {
+    "name" : "addressLine2",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    },
+    "doc" : "Address Line 2"
+  }, {
+    "name" : "addressLine3",
+    "type" : [ "null", "string" ],
+    "doc" : "Address Line 3"
+  }, {
+    "name" : "city",
+    "type" : "string",
+    "doc" : "City name"
+  }, {
+    "name" : "country",
+    "type" : "string",
+    "doc" : "Country"
+  }, {
+    "name" : "state",
+    "type" : "string",
+    "doc" : "State"
+  }, {
+    "name" : "postalCode",
+    "type" : "string",
+    "doc" : "The Postal Code."
+  }, {
+    "name" : "customerSource",
+    "type" : {
+      "type" : "enum",
+      "name" : "CustomerSource",
+      "doc" : "Customer Source\n\n\tPHYGITAL -  In store POS\n\n\tDIGITAL - Online\n\n\tMARKETPLACE - Marketplace",
+      "symbols" : [ "PHYGITAL", "DIGITAL", "MARKETPLACE" ]
+    },
+    "doc" : "customer source - xstore, sfcc, marketplace etc"
+  }, {
+    "name" : "createdDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was created"
+  }, {
+    "name" : "updatedDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was updated"
+  } ]
+}

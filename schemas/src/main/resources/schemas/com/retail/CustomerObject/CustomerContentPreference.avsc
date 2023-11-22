@@ -1,0 +1,51 @@
+{
+  "type" : "record",
+  "name" : "CustomerContentPreference",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "This object should provide for the Customer Contentt Preferences",
+  "fields" : [ {
+    "name" : "customerId",
+    "type" : "string",
+    "doc" : "Id assigned by Retail store to customers"
+  }, {
+    "name" : "emailContentPreference",
+    "type" : {
+      "type" : "enum",
+      "name" : "ContentPreference",
+      "doc" : "Content to be selected during Marketing\n\n\tMENS - Everything Mens\n\n\tWOMENS Everything Womens\n\n\tMENS-PANTS - Mens Pants only\n\n\tWOMENS-PANTS - Womens Pants only\n\n\tMENS-OUTERWEAR - Mens Outerwear only\n\n\tWOMENS-LEGGINGS - Womens Leggings only\n\n\tMENS-ACCESSORIES - Mens Accessories only",
+      "symbols" : [ "MENS", "WOMENS", "MENSPANTS", "WOMENSPANTS", "MENSOUTERWEAR", "WOMENSLEGGINGS", "MENSACCESSORIES" ]
+    },
+    "doc" : "Email Content Preference"
+  }, {
+    "name" : "emailFrequency",
+    "type" : {
+      "type" : "enum",
+      "name" : "MarketingFrequency",
+      "doc" : "Frequency of Marketing emails\n\n\tWEEKLY - one email per week\n\n\tBIWEEKLY - One email every 2 weeks\n\n\tDAILY - Daily one email\n\n\tMONTHLY - One email per month\n\n\tFORTNIGHT - One email every 15 days\n\n\t2PERWEEK - 2 emails per week",
+      "symbols" : [ "WEEKLY", "BIWEEKLY", "DAILY", "MONTHLY", "FORTNIGHT", "TWOPERWEEK" ]
+    },
+    "doc" : "Frequency of emails that can be sent"
+  }, {
+    "name" : "phoneContentPreference",
+    "type" : "ContentPreference",
+    "doc" : "Content preference for phone messages"
+  }, {
+    "name" : "phoneFrequency",
+    "type" : "MarketingFrequency",
+    "doc" : "Frequencey of sms messages to the customer"
+  }, {
+    "name" : "createdDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was created"
+  }, {
+    "name" : "updatedDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was updated"
+  } ]
+}

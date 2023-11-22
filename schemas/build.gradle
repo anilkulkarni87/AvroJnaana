@@ -1,12 +1,14 @@
 import com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask
 import com.github.davidmc24.gradle.plugin.avro.GenerateAvroProtocolTask
 import com.github.davidmc24.gradle.plugin.avro.GenerateAvroSchemaTask
-
+import org.apache.avro.Schema
+import org.apache.avro.SchemaCompatibility
+import org.apache.avro.SchemaCompatibility.SchemaCompatibilityType
 
 plugins {
     id 'java'
-    id "com.github.davidmc24.gradle.plugin.avro" version "1.7.0"
-    id "com.github.node-gradle.node" version "3.5.1"
+    alias(libs.plugins.com.github.davidmc24.gradle.plugin.avro)
+    alias(libs.plugins.com.github.node.gradle.node)
 }
 
 apply plugin: "com.github.davidmc24.gradle.plugin.avro-base"
@@ -14,28 +16,18 @@ apply plugin: "com.github.davidmc24.gradle.plugin.avro-base"
 group 'com.lavro'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-    maven {
-        url "https://clojars.org/repo/"
-    }
-    maven {
-        url "https://packages.confluent.io/maven"
-    }
-}
+
 configurations {
     customConversions
 }
 
 dependencies {
     customConversions(project(":custom-conversions"))
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    implementation 'org.scala-lang:scala-library:2.13.10'
-    implementation "org.apache.avro:avro:1.11.1"
+    testRuntimeOnly libs.org.junit.jupiter.junit.jupiter.engine
+    testImplementation libs.org.junit.jupiter.junit.jupiter.api
+    implementation libs.org.apache.avro
     // https://mvnrepository.com/artifact/io.confluent/kafka-schema-registry
-    implementation 'io.confluent:kafka-schema-registry:7.5.1'
-    implementation(project(":custom-conversions"))
+    implementation libs.io.confluent.kafka.schema.registry
     implementation(project(":custom-conversions"))
 
 }
@@ -44,15 +36,10 @@ test {
     useJUnitPlatform()
 }
 
-//task generateProtocol(type: GenerateAvroProtocolTask) {
-//    shouldRunAfter "build"
-//    source file("src/main/avro")
-//    include("**/*.avdl")
-//    outputDir = file("build/generated-main-avro-avpr")
-//}
 
 def generateProtocol = tasks.register("generateProtocol", GenerateAvroProtocolTask) {
     shouldRunAfter("build")
+    println "Running generateProtocol"
     source file("src/main/avro")
     include("**/*.avdl")
     outputDir = file("build/generated-main-avro-avpr")
@@ -61,19 +48,27 @@ def generateProtocol = tasks.register("generateProtocol", GenerateAvroProtocolTa
 def generateSchema=tasks.register("generateSchema", GenerateAvroSchemaTask) {
 //    shouldRunAfter("GenerateAvroProtocolTask")
     dependsOn generateProtocol
+    println "Running generateSchema"
     source file("src/main/avro")
     source file("build/generated-main-avro-avpr")
     include("**/*.avpr")
     outputDir = file("build/generated-main-avro-avsc")
 }
 
-//task generateSchema(type: GenerateAvroSchemaTask){
-//    shouldRunAfter "build"
-//    shouldRunAfter "generateProtocol"
-//    source file("build/generated-main-avro-avpr")
-//    include("**/*.avpr")
-//    outputDir = file("build/generated-main-avro-avsc")
-//}
+tasks.register("copyAvroSchemas", Copy) {
+    dependsOn(generateSchema)
+    println "Running copyAvroSchemas"
+    def sourceDir = file('build/generated-main-avro-avsc') // Change this to your Avro schema source directory
+    def destinationDir = file('src/main/resources/schemas') // Change this to your desired destination directory
+
+    // Ensure the destination directory exists; if not, create it
+    destinationDir.mkdirs()
+
+    from sourceDir
+    into destinationDir
+    include '**/*.avsc'
+}
+
 
 avro {
     enableDecimalLogicalType = false
@@ -99,11 +94,5 @@ tasks.register("generateAvrodoc", NpxTask) {
     mustRunAfter tasks.withType(GenerateAvroJavaTask)
 }
 
-//task generateAvrodoc(type: NpxTask) {
-//    dependsOn(generateSchema)
-//    command = '@mikaello/avrodoc-plus'
-//    args = ['-i','build/generated-main-avro-avsc', '-o','../docs/avrodoc/avrodoc.html']
-//    mustRunAfter tasks.withType(GenerateAvroJavaTask)
-//}
 
-//tasks.named("generateProtocol") { finalizedBy("generateSchema") }
+build.finalizedBy generateProtocol, generateSchema, generateAvrodoc, copyAvroSchemas

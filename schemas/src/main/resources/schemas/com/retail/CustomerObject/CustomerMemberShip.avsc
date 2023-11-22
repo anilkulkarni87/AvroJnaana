@@ -1,0 +1,53 @@
+{
+  "type" : "record",
+  "name" : "CustomerMemberShip",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "This object should provide for the customer Membership details in different programs",
+  "fields" : [ {
+    "name" : "customerId",
+    "type" : "string",
+    "doc" : "Id assigned by Retail store to customers"
+  }, {
+    "name" : "programName",
+    "type" : {
+      "type" : "enum",
+      "name" : "Programs",
+      "doc" : "Programs\n\n\tHIGHTIER - High Tier Customers\n\n\tLEADER - Leads communities for the company\n\n\tLOYALTY - Another loyalty program",
+      "symbols" : [ "HIGHTIER", "LEADER", "LOYALTY" ]
+    },
+    "doc" : "Name of the program"
+  }, {
+    "name" : "programId",
+    "type" : "int",
+    "doc" : "ID of the Program"
+  }, {
+    "name" : "startDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was created"
+  }, {
+    "name" : "endDate",
+    "type" : [ "null", {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    } ],
+    "doc" : "Date when this record was updated",
+    "default" : null
+  }, {
+    "name" : "createdDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was created"
+  }, {
+    "name" : "updatedDate",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    },
+    "doc" : "Date when this record was updated"
+  } ]
+}

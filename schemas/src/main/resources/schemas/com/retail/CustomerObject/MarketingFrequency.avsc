@@ -1,0 +1,7 @@
+{
+  "type" : "enum",
+  "name" : "MarketingFrequency",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "Frequency of Marketing emails\n\n\tWEEKLY - one email per week\n\n\tBIWEEKLY - One email every 2 weeks\n\n\tDAILY - Daily one email\n\n\tMONTHLY - One email per month\n\n\tFORTNIGHT - One email every 15 days\n\n\t2PERWEEK - 2 emails per week",
+  "symbols" : [ "WEEKLY", "BIWEEKLY", "DAILY", "MONTHLY", "FORTNIGHT", "TWOPERWEEK" ]
+}

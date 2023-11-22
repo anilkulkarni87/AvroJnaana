@@ -1,0 +1,27 @@
+{
+  "type" : "record",
+  "name" : "OrderRecord",
+  "namespace" : "com.dataanada.order",
+  "fields" : [ {
+    "name" : "orderId",
+    "type" : "int"
+  }, {
+    "name" : "storeId",
+    "type" : [ "null", "int" ],
+    "default" : null
+  }, {
+    "name" : "customerId",
+    "type" : "int"
+  }, {
+    "name" : "price",
+    "type" : {
+      "type" : "bytes",
+      "logicalType" : "decimal",
+      "precision" : 5,
+      "scale" : 2
+    }
+  }, {
+    "name" : "orderType",
+    "type" : "string"
+  } ]
+}
