@@ -5,21 +5,14 @@ plugins {
 group 'com.lavro'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-    maven {
-        url "https://clojars.org/repo/"
-    }
-}
 
 dependencies {
-    implementation "org.apache.avro:avro:1.11.1"
-    implementation 'com.github.davidmc24.gradle.plugin:gradle-avro-plugin:1.7.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    // https://mvnrepository.com/artifact/clojure-interop/javax.crypto
-    implementation 'clojure-interop:javax.crypto:1.0.5'
-    testImplementation 'clojure-interop:javax.crypto:1.0.5'
+    implementation libs.org.apache.avro
+    implementation libs.com.github.davidmc24.gradle.plugin.gradle.avro.plugin
+    testRuntimeOnly libs.org.junit.jupiter.junit.jupiter.engine
+    testImplementation libs.org.junit.jupiter.junit.jupiter.api
+    implementation libs.clojure.interop.javax.crypto
+    testImplementation libs.clojure.interop.javax.crypto
 
 }
 

@@ -1,0 +1,42 @@
+{
+  "type" : "record",
+  "name" : "CustomerRecord",
+  "namespace" : "com.dataanada.customer",
+  "fields" : [ {
+    "name" : "customerId",
+    "type" : "int"
+  }, {
+    "name" : "firstName",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    }
+  }, {
+    "name" : "lastName",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    }
+  }, {
+    "name" : "email",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    }
+  }, {
+    "name" : "addressLine1",
+    "type" : "string"
+  }, {
+    "name" : "city",
+    "type" : "string"
+  }, {
+    "name" : "state",
+    "type" : "string"
+  }, {
+    "name" : "zip",
+    "type" : "int"
+  }, {
+    "name" : "country",
+    "type" : "string"
+  } ]
+}

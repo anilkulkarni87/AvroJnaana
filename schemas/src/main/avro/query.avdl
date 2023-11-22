@@ -7,5 +7,6 @@ protocol Example{
 		@logicalType("encrypted")
 		string secretName;
 		string queryEngine;
+		//union {null,@logicalType("encrypted") string} testField = null;
 	}
 }

@@ -1,0 +1,24 @@
+{
+  "type" : "record",
+  "name" : "QueryRecord",
+  "namespace" : "com.lina.query",
+  "fields" : [ {
+    "name" : "queryId",
+    "type" : "string"
+  }, {
+    "name" : "queryAuthor",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "reversed"
+    }
+  }, {
+    "name" : "secretName",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "encrypted"
+    }
+  }, {
+    "name" : "queryEngine",
+    "type" : "string"
+  } ]
+}

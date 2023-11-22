@@ -1,0 +1,7 @@
+{
+  "type" : "enum",
+  "name" : "ContentPreference",
+  "namespace" : "com.retail.CustomerObject",
+  "doc" : "Content to be selected during Marketing\n\n\tMENS - Everything Mens\n\n\tWOMENS Everything Womens\n\n\tMENS-PANTS - Mens Pants only\n\n\tWOMENS-PANTS - Womens Pants only\n\n\tMENS-OUTERWEAR - Mens Outerwear only\n\n\tWOMENS-LEGGINGS - Womens Leggings only\n\n\tMENS-ACCESSORIES - Mens Accessories only",
+  "symbols" : [ "MENS", "WOMENS", "MENSPANTS", "WOMENSPANTS", "MENSOUTERWEAR", "WOMENSLEGGINGS", "MENSACCESSORIES" ]
+}
