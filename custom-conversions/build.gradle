@@ -22,3 +22,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+
+
+// Configure the 'test' task
+test {
+   reports {
+       html.destination(file('../docs/reports'))
+   }
+}
