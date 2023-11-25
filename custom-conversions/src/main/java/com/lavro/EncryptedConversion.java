@@ -44,6 +44,7 @@ public class EncryptedConversion extends Conversion<CharSequence> {
         if(plaintext == null){
             return null;
         }
+        System.out.println(secretKey);
         byte[] new_data = plaintext.getBytes(StandardCharsets.UTF_8);
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -82,9 +83,7 @@ public class EncryptedConversion extends Conversion<CharSequence> {
 
     public String toCharSequence(CharSequence value, Schema schema, LogicalType type) {
         try {
-            System.out.println(value);
-            System.out.println(schema);
-            System.out.println(type);
+
             String encrypted = encrypt(String.valueOf(value));
             System.out.println("When writing to Avro ToByteBuffer is :" + encrypted.toString());
             return encrypted;

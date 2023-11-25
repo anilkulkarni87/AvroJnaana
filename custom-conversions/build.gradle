@@ -13,6 +13,9 @@ dependencies {
     testImplementation libs.org.junit.jupiter.junit.jupiter.api
     implementation libs.clojure.interop.javax.crypto
     testImplementation libs.clojure.interop.javax.crypto
+    // https://mvnrepository.com/artifact/org.mockito/mockito-core
+    testImplementation libs.org.mockito.core
+
 
 }
 

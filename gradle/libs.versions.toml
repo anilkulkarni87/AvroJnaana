@@ -10,7 +10,7 @@ datafaker="1.7.0"
 apache-avro="1.11.2"
 apache-kafka-kafka-clients="3.6.0"
 logging-log4j-log4j-core="2.17.1"
-
+org-mockito-core="5.7.0"
 
 ben-manes-versions="0.50.0"
 kafka-schema-registry-gradle-plugin="1.12.0"
@@ -32,6 +32,8 @@ org-junit-jupiter-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupite
 org-junit-jupiter-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "org-junit-jupiter" }
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j" }
 org-slf4j-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "org-slf4j" }
+org-mockito-core= {module = 'org.mockito:mockito-core', version.ref= "org-mockito-core" }
+
 
 [plugins]
 com-github-ben-manes-versions = {id="com.github.ben-manes.versions",version.ref="ben-manes-versions"}
