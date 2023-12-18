@@ -38,15 +38,15 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@87a9a15658c426a54dd469d4fc7dc1a73ca9d4a6
+      uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27
       with:
         arguments: clean build
     - name: Generate Schemas
-      uses: gradle/gradle-build-action@87a9a15658c426a54dd469d4fc7dc1a73ca9d4a6
+      uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27
       with:
         arguments: schemas:generateSchema
     - name: Generate Avrodoc
-      uses: gradle/gradle-build-action@87a9a15658c426a54dd469d4fc7dc1a73ca9d4a6
+      uses: gradle/gradle-build-action@8cbcb9948b5892387aed077daf6f90e1f0ba5b27
       with:
         arguments: schemas:generateAvroDoc
     - name: Setup Pages
