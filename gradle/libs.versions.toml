@@ -16,7 +16,7 @@ ben-manes-versions="0.50.0"
 kafka-schema-registry-gradle-plugin="1.12.0"
 gradle-node="7.0.1"
 littlerobots-version-catalog-update="0.8.1"
-rewrite="6.5.8"
+rewrite="6.6.6"
 
 [libraries]
 clojure-interop-javax-crypto = { module = "clojure-interop:javax.crypto", version.ref="javax-crypto" }
