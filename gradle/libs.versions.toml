@@ -1,5 +1,5 @@
 [versions]
-org-junit-jupiter = "5.10.0"
+org-junit-jupiter = "5.10.1"
 org-slf4j = "2.0.9"
 javax-crypto="1.0.5"
 davidmc24-gradle-plugin-gradle-avro-plugin="1.9.1"
