@@ -9,7 +9,7 @@ confluent-kafka-schema-registry="7.5.1"
 datafaker="1.7.0"
 apache-avro="1.11.3"
 apache-kafka-kafka-clients="3.6.0"
-logging-log4j-log4j-core="2.17.1"
+logging-log4j-log4j-core="2.23.0"
 org-mockito-core="5.7.0"
 
 ben-manes-versions="0.50.0"
