@@ -1,0 +1,71 @@
+# Site settings
+title: AvroJnaana
+description: Learn Apache Avro custom logical types, schema evolution, and Kafka/Schema Registry integration
+url: https://anilkulkarni87.github.io
+baseurl: /AvroJnaana
+author: Anil Kulkarni
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Includes
+include:
+  - docs
+  - _includes
+  - _layouts
+
+# Exclude build artifacts and source code from Jekyll processing
+exclude:
+  - build
+  - src
+  - gradle
+  - docker
+  - schemas
+  - config
+  - custom-conversions
+  - schema-registry
+  - "*.gradle"
+  - "*.jar"
+  - "*.avro"
+  - node_modules
+  - Gemfile
+  - Gemfile.lock
+  - docker-compose.yml
+  - gradlew
+  - gradlew.bat
+  - query.avro
+  - settings.gradle
+  - LICENSE
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# Navigation (used by nav.html include)
+navigation:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /getting-started
+  - title: Guides
+    url: /guides/
+    children:
+      - title: Custom Logical Types
+        url: /guides/logical-types
+      - title: Kafka Integration
+        url: /guides/kafka
+      - title: Schema Registry
+        url: /guides/schema-registry
+      - title: Production Guide
+        url: /guides/production
+  - title: Playground
+    url: /docs/avro-playground/
+  - title: Avrodoc
+    url: /docs/avrodoc/avrodoc.html
+  - title: Test Reports
+    url: /docs/reports/
