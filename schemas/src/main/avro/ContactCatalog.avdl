@@ -1,0 +1,18 @@
+@namespace("com.learn.catalog")
+protocol Catalog {
+  /**
+   * Sample record to showcase multiple custom logical types.
+   * Toggle logical types on/off in this IDL to see how values change.
+   */
+  record Contact {
+    @logicalType("email_lower")
+    string email;
+
+    @logicalType("phone_normalized")
+    string phoneNumber;
+
+    /** Same fields without logical types for comparison */
+    string emailRaw;
+    string phoneRaw;
+  }
+}

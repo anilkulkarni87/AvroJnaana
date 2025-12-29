@@ -57,6 +57,91 @@ tasks.withType(Checkstyle) {
     }
 }
 
+tasks.register("lint") {
+    group = "verification"
+    description = "Runs checkstyle and tests"
+    dependsOn("check")
+}
+
+tasks.register("runQueryDemo", JavaExec) {
+    dependsOn(":schemas:generateSchema", "classes")
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set("com.lavro.QueryRecordOutput")
+    def key = System.getenv("ENCRYPTED_LOGICAL_KEY")
+    def iv = System.getenv("ENCRYPTED_LOGICAL_IV")
+    if (key) {
+        environment("ENCRYPTED_LOGICAL_KEY", key)
+    }
+    if (iv) {
+        environment("ENCRYPTED_LOGICAL_IV", iv)
+    }
+}
+
+tasks.register("runCustomerDemo", JavaExec) {
+    dependsOn(":schemas:generateSchema", "classes")
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set("com.lavro.CustomerObjectModelOutput")
+}
+
+tasks.register("startKafkaDemo", Exec) {
+    group = "application"
+    description = "Starts Confluent local services (requires confluent CLI)"
+    commandLine("confluent", "local", "services", "start")
+}
+
+tasks.register("createTopicDemo", Exec) {
+    group = "application"
+    description = "Creates the demo topic first_topic (requires confluent CLI running)"
+    commandLine("confluent", "kafka", "topic", "create", "first_topic", "--partitions", "1", "--replication-factor", "1")
+}
+
+tasks.register("stopKafkaDemo", Exec) {
+    group = "application"
+    description = "Stops Confluent local services (requires confluent CLI)"
+    commandLine("confluent", "local", "services", "stop")
+}
+
+tasks.register("runProducerDocker", JavaExec) {
+    dependsOn(":schemas:generateSchema", "classes")
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set("com.lavro.ProducerDemo")
+    environment("BOOTSTRAP_SERVERS", System.getenv().getOrDefault("BOOTSTRAP_SERVERS", "kafka:9092"))
+    environment("SCHEMA_REGISTRY_URL", System.getenv().getOrDefault("SCHEMA_REGISTRY_URL", "http://schema-registry:8081"))
+    environment("TOPIC", System.getenv().getOrDefault("TOPIC", "first_topic"))
+}
+
+tasks.register("runConsumerDocker", JavaExec) {
+    dependsOn(":schemas:generateSchema", "classes")
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set("com.lavro.ConsumerDemo")
+    environment("BOOTSTRAP_SERVERS", System.getenv().getOrDefault("BOOTSTRAP_SERVERS", "kafka:9092"))
+    environment("SCHEMA_REGISTRY_URL", System.getenv().getOrDefault("SCHEMA_REGISTRY_URL", "http://schema-registry:8081"))
+    environment("TOPIC", System.getenv().getOrDefault("TOPIC", "first_topic"))
+    environment("GROUP_ID", System.getenv().getOrDefault("GROUP_ID", "avro-docker-consumer"))
+}
+
+tasks.register("schemaDiff") {
+    group = "verification"
+    description = "Check compatibility between two Avro schemas. Usage: ./gradlew schemaDiff -Pold=path -Pnew=path"
+    doLast {
+        def oldPath = project.findProperty("old")
+        def newPath = project.findProperty("new")
+        if (!oldPath || !newPath) {
+            throw new GradleException("Usage: ./gradlew schemaDiff -Pold=path/to/old.avsc -Pnew=path/to/new.avsc")
+        }
+        def oldSchema = new org.apache.avro.Schema.Parser().parse(file(oldPath))
+        def newSchema = new org.apache.avro.Schema.Parser().parse(file(newPath))
+        def result = org.apache.avro.SchemaCompatibility.checkReaderWriterCompatibility(newSchema, oldSchema)
+        println "Compatibility: ${result.type}"
+        if (!result.getResult().getIncompatibilities().isEmpty()) {
+            println "Reasons:"
+            result.getResult().getIncompatibilities().each { inc ->
+                println "- ${inc.getMessage()}"
+            }
+        }
+    }
+}
+
 
 schemaRegistry{
     url = 'http://localhost:8081'

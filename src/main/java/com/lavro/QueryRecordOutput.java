@@ -12,9 +12,13 @@ import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class QueryRecordOutput {
+  private static final Logger log = LoggerFactory.getLogger(QueryRecordOutput.class);
+
   public static void main(String[] args) {
     Faker faker = new Faker();
     Schema schema = QueryRecord.getClassSchema();
@@ -34,10 +38,8 @@ public class QueryRecordOutput {
             .build();
         dataFileWriter.append(queryRecord);
       }
-      // Close the file
       dataFileWriter.close();
-      System.out.println("successfully wrote query.avro");
-      System.out.println("*****************************");
+      log.info("Successfully wrote query.avro");
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -47,17 +49,14 @@ public class QueryRecordOutput {
     final DatumReader<QueryRecord> datumReader = new SpecificDatumReader<>(QueryRecord.class);
     final DataFileReader<QueryRecord> dataFileReader;
     try {
-      System.out.println("Reading our specific record");
-      System.out.println("*****************************");
+      log.info("Reading the specific record");
       dataFileReader = new DataFileReader<>(file, datumReader);
       while (dataFileReader.hasNext()) {
         QueryRecord query = dataFileReader.next();
-        System.out.println(query.toString());
-        System.out.println("Query ID        : " + query.getQueryId());
-        System.out.println("Query Author    : " + query.getQueryAuthor());
-        System.out.println("Secret Name     : " + query.getSecretName());
-        System.out.println("Engine Name     : " + query.getQueryEngine());
-//        System.out.println("Test Field     : " + query.getTestField());
+        log.info("Query ID        : {}", query.getQueryId());
+        log.info("Query Author    : {}", query.getQueryAuthor());
+        log.info("Secret Name     : {}", query.getSecretName());
+        log.info("Engine Name     : {}", query.getQueryEngine());
       }
     } catch (IOException e) {
       e.printStackTrace();

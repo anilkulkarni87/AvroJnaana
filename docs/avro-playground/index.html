@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Avro Logical Type Playground</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+    .section { margin-bottom: 2rem; }
+    .card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+    label { display: block; margin-top: 0.5rem; }
+    input[type="text"] { width: 100%; padding: 0.4rem; }
+    code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; }
+    .pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; background: #eef; margin-right: 0.4rem; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>Avro Logical Type Playground</h1>
+  <p>Toggle custom logical types to see how values transform. This is a client-side approximation of the Java conversions in this repo.</p>
+
+  <div class="section">
+    <h2>QueryRecord</h2>
+    <div class="pill">encrypted</div><div class="pill">reversed</div>
+    <div class="card">
+      <label>Query Author (reversed)</label>
+      <input id="author" type="text" value="Ada Lovelace">
+      <label>Secret Name (encrypted)</label>
+      <input id="secret" type="text" value="my-secret">
+      <button onclick="applyQuery()">Apply Logical Types</button>
+      <pre id="queryOutput"></pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Contact (email + phone)</h2>
+    <div class="pill">email_lower</div><div class="pill">phone_normalized</div>
+    <div class="card">
+      <label>Email</label>
+      <input id="email" type="text" value="User.Name@Example.COM">
+      <label>Phone</label>
+      <input id="phone" type="text" value="+1 (555) 123-4567">
+      <button onclick="applyContact()">Apply Logical Types</button>
+      <pre id="contactOutput"></pre>
+    </div>
+  </div>
+
+  <script>
+    function reversed(val) {
+      return val == null ? null : "Reversed" + val;
+    }
+    function encrypt(val) {
+      // demo-only: Base64 to visualize change (not the same as AES conversion in Java)
+      return val == null ? null : btoa(val);
+    }
+    function emailLower(val) {
+      return val == null ? null : val.toLowerCase();
+    }
+    function phoneNormalize(val) {
+      if (val == null) return null;
+      const trimmed = val.trim();
+      if (trimmed.startsWith("+")) {
+        return "+" + trimmed.replace(/[^0-9]/g, "");
+      }
+      return trimmed.replace(/[^0-9]/g, "");
+    }
+
+    function applyQuery() {
+      const author = document.getElementById("author").value;
+      const secret = document.getElementById("secret").value;
+      const record = {
+        queryId: "demo-id",
+        queryAuthor: reversed(author),
+        secretName: encrypt(secret),
+        queryEngine: "demo-engine"
+      };
+      document.getElementById("queryOutput").textContent = JSON.stringify(record, null, 2);
+    }
+
+    function applyContact() {
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const record = {
+        email: emailLower(email),
+        phoneNumber: phoneNormalize(phone),
+        emailRaw: email,
+        phoneRaw: phone
+      };
+      document.getElementById("contactOutput").textContent = JSON.stringify(record, null, 2);
+    }
+
+    applyQuery();
+    applyContact();
+  </script>
+</body>
+</html>
