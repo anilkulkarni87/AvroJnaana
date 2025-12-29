@@ -14,6 +14,20 @@ If you prefer a Gradle entry point (requires Confluent CLI on PATH):
 ./gradlew startKafkaDemo
 ```
 
+Or Docker (no local Confluent install needed):
+```bash
+docker-compose up demo-producer demo-consumer
+```
+Logs:
+```bash
+docker-compose logs -f demo-producer
+docker-compose logs -f demo-consumer
+```
+Defaults inside the containers:
+- `BOOTSTRAP_SERVERS=kafka:9092`
+- `SCHEMA_REGISTRY_URL=http://schema-registry:8081`
+- `TOPIC=first_topic`
+
 ### Create a topic
 ```bash
 confluent kafka topic create first_topic --partitions 1 --replication-factor 1
