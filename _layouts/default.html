@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <meta name="description"
+        content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+
+    {% include head-custom.html %}
+    {% include theme.html %}
+</head>
+
+<body>
+    {% include nav.html %}
+
+    <main class="content">
+        {% if page.title and page.url != '/' %}
+        <h1>{{ page.title }}</h1>
+        {% endif %}
+
+        {{ content }}
+    </main>
+
+    {% include footer.html %}
+
+    <script>
+        // Add anchor links to headings
+        document.querySelectorAll('h2, h3').forEach(heading => {
+            if (heading.id) {
+                const link = document.createElement('a');
+                link.href = '#' + heading.id;
+                link.textContent = ' #';
+                link.style.opacity = '0';
+                link.style.marginLeft = '8px';
+                link.style.textDecoration = 'none';
+                link.style.color = 'var(--text-accent)';
+
+                heading.appendChild(link);
+
+                heading.addEventListener('mouseenter', () => link.style.opacity = '1');
+                heading.addEventListener('mouseleave', () => link.style.opacity = '0');
+            }
+        });
+
+        // Make external links open in new tab
+        document.querySelectorAll('a').forEach(link => {
+            if (link.hostname !== window.location.hostname && link.hostname !== '') {
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+            }
+        });
+    </script>
+</body>
+
+</html>

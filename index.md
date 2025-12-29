@@ -1,150 +1,142 @@
 ---
+layout: default
 title: AvroJnaana
+description: Master Apache Avro integration with Kafka, Schema Registry, and Custome Logical Types
 ---
 
 <style>
-  :root {
-    --bg: #0b1021;
-    --panel: #11172b;
-    --text: #e8edf7;
-    --muted: #9aa6bf;
-    --accent: #7bdff2;
-    --accent-2: #f5a524;
-    --card-radius: 14px;
+  .hero-section {
+    position: relative;
+    padding: var(--space-3xl) 0;
+    text-align: center;
+    background: radial-gradient(circle at 50% 0%, rgba(123, 223, 242, 0.1) 0%, transparent 50%);
   }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-    margin: 0;
-    padding: 0;
+
+  .hero-title {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: var(--space-lg);
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  .page {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 48px 24px 96px;
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto var(--space-2xl);
   }
-  .hero {
-    padding: 32px;
-    background: linear-gradient(135deg, #121a30, #0e2038);
-    border: 1px solid #1f2a46;
-    border-radius: var(--card-radius);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-  }
-  h1 {
-    margin-top: 0;
-    font-size: 34px;
-    letter-spacing: -0.02em;
-  }
-  p.lead {
-    color: var(--muted);
-    font-size: 17px;
-    line-height: 1.6;
-    margin-bottom: 24px;
-  }
-  .badges {
+
+  .hero-badges {
     display: flex;
+    gap: var(--space-md);
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: var(--space-2xl);
   }
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid #1f2a46;
-    color: var(--text);
-    text-decoration: none;
-    font-weight: 600;
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    margin-bottom: var(--space-3xl);
   }
-  .badge.accent { background: rgba(123, 223, 242, 0.12); border-color: rgba(123,223,242,0.4); }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 18px;
-    margin-top: 22px;
-  }
-  .card {
-    background: var(--panel);
-    border: 1px solid #1f2a46;
-    border-radius: var(--card-radius);
-    padding: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-  }
-  .card h3 { margin-top: 0; margin-bottom: 10px; }
-  .card p { color: var(--muted); margin: 0 0 10px; line-height: 1.5; }
-  .link {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .link:hover { text-decoration: underline; }
-  ul.clean { padding-left: 18px; color: var(--muted); line-height: 1.6; }
-  @media (max-width: 600px) {
-    .hero { padding: 24px; }
-    h1 { font-size: 28px; }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
   }
 </style>
 
-<div class="page">
-  <div class="hero">
-    <h1>AvroJnaana</h1>
-    <p class="lead">Learn and experiment with Apache Avro custom logical types, schema evolution, and Kafka/Schema Registry integration. Jump into the hosted playground, generated docs, or runnable demos.</p>
-    <div class="badges">
-      <a class="badge accent" href="https://anilkulkarni87.github.io/AvroJnaana/docs/avro-playground/index.html">Open Playground</a>
-      <a class="badge" href="https://anilkulkarni87.github.io/AvroJnaana/docs/avrodoc/avrodoc.html#/">Avrodoc</a>
-      <a class="badge" href="https://anilkulkarni87.github.io/AvroJnaana/docs/reports/index.html">Test Reports</a>
-      <a class="badge" href="https://github.com/anilkulkarni87/AvroJnaana">GitHub Repo</a>
-      <a class="badge" href="README.md">README</a>
+<div class="hero-section">
+  <div class="container">
+    <h1 class="hero-title">Unlock the Power of Avro</h1>
+    <p class="hero-subtitle">
+      A comprehensive toolkit for mastering Apache Avro custom logical types, schema evolution, and Kafka integration.
+    </p>
+
+    <div class="hero-actions">
+      <a href="{{ site.baseurl }}/docs/avro-playground/" class="btn btn-primary">Try the Playground</a>
+      <a href="{{ site.baseurl }}/getting-started" class="btn btn-secondary">Get Started</a>
+    </div>
+
+    <div class="hero-badges">
+      <span class="badge">Apache Avro 1.11+</span>
+      <span class="badge">Kafka 3.x</span>
+      <span class="badge">Schema Registry</span>
+      <span class="badge">Gradle</span>
+      <span class="badge-warning">Experimental</span>
     </div>
   </div>
+</div>
 
-  <div class="grid">
+<div class="container mb-2xl">
+  <div class="grid grid-3">
     <div class="card">
-      <h3>Run the demos</h3>
-      <p>Local (Gradle):</p>
-      <ul class="clean">
-        <li><code>./gradlew runQueryDemo</code></li>
-        <li><code>./gradlew runCustomerDemo</code></li>
-      </ul>
-      <p>Docker sandbox:</p>
-      <ul class="clean">
-        <li><code>docker-compose up demo-producer demo-consumer</code></li>
-        <li><code>docker-compose logs -f demo-consumer</code></li>
-      </ul>
+      <div class="feature-icon">🔒</div>
+      <h3>Custom Logical Types</h3>
+      <p>Seamlessly handle encryption, PII masking, and data normalization directly within your Avro schemas.</p>
+      <a href="{{ site.baseurl }}/guides/logical-types">Explore types →</a>
     </div>
-
+    
     <div class="card">
-      <h3>Schema tools</h3>
-      <ul class="clean">
-        <li>Generate schemas: <code>./gradlew schemas:generateSchema</code></li>
-        <li>Avrodoc: <code>./gradlew schemas:generateAvroDoc</code></li>
-        <li>Schema diff: <code>./gradlew schemaDiff -Pold=... -Pnew=...</code></li>
-        <li>Schema Registry: <code>./gradlew schemaRegistryRegister</code></li>
-      </ul>
+      <div class="feature-icon">⚖️</div>
+      <h3>Schema Evolution</h3>
+      <p>Validate compatibility changes before you deploy. Integration with Confluent Schema Registry included.</p>
+      <a href="{{ site.baseurl }}/guides/schema-registry">Learn more →</a>
     </div>
-
+    
     <div class="card">
-      <h3>Custom logical types</h3>
-      <p>Included:</p>
-      <ul class="clean">
-        <li><code>encrypted</code> (AES-GCM)</li>
-        <li><code>reversed</code> (demo)</li>
-        <li><code>email_lower</code>, <code>phone_normalized</code></li>
-      </ul>
-      <p>Scaffold your own:</p>
-      <ul class="clean">
-        <li><code>./gradlew newLogicalType -Pname=mask</code></li>
-      </ul>
+      <div class="feature-icon">🚀</div>
+      <h3>Kafka Integration</h3>
+      <p>Production-ready examples of producers and consumers with automatic type conversion.</p>
+      <a href="{{ site.baseurl }}/guides/kafka">View examples →</a>
     </div>
+  </div>
+</div>
 
+<div class="container mb-2xl">
+  <div class="grid grid-2">
+    <div>
+      <h2>Interactive Playground</h2>
+      <p>
+        Experiment with custom logical types in your browser. Toggle encryption and data masking to see how your data transforms in real-time.
+      </p>
+      <ul style="padding-left: 20px; color: var(--text-secondary);">
+        <li>AES-GCM Encryption simulation</li>
+        <li>PII Masking</li>
+        <li>Custom transformations</li>
+      </ul>
+      <a href="{{ site.baseurl }}/docs/avro-playground/" class="btn btn-secondary mt-lg">Launch Playground</a>
+    </div>
+    <div class="card" style="display: flex; align-items: center; justify-content: center; min-height: 200px; background: var(--bg-secondary);">
+      <!-- Interactive visual placeholder using existing styles -->
+      <div style="text-align: center;">
+        <span style="font-size: 3rem; margin-bottom: 1rem; display: block;">🛠️</span>
+        <div style="font-family: var(--font-mono); color: var(--text-accent);">{"secret": "*********"}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mb-2xl">
+  <h2 class="text-center mb-xl">Quick Start</h2>
+  
+  <div class="grid grid-2">
     <div class="card">
-      <h3>Play &amp; learn</h3>
-      <p>Hosted playground lets you toggle logical types, view raw vs transformed vs decrypted, and download sample JSON.</p>
-      <p>Avrodoc provides searchable schema docs; test reports show conversion coverage.</p>
+      <h3>Run Locally</h3>
+      <p>Clone and run the demo with Gradle wrapper:</p>
+      <pre>
+git clone https://github.com/anilkulkarni87/AvroJnaana
+cd AvroJnaana
+./gradlew runQueryDemo</pre>
+    </div>
+    
+    <div class="card">
+      <h3>Run with Docker</h3>
+      <p>Spin up Kafka & Schema Registry stack:</p>
+      <pre>docker-compose up demo-producer demo-consumer</pre>
     </div>
   </div>
 </div>
