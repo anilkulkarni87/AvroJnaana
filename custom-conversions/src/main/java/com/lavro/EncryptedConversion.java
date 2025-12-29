@@ -1,33 +1,67 @@
 package com.lavro;
 
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import org.apache.avro.Conversion;
 import org.apache.avro.LogicalType;
 import org.apache.avro.Schema;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Base64;
-
-
 public class EncryptedConversion extends Conversion<CharSequence> {
-    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
-    private static final int KEY_SIZE = 256;
-    private static final byte[] DEFAULT_KEY = "MySecretKey12345".getBytes(StandardCharsets.UTF_8);
+    private static final String ALGORITHM = "AES/GCM/NoPadding";
+    private static final int GCM_TAG_LENGTH_BITS = 128;
+    private static final int GCM_IV_LENGTH = 12;
+    private static final String KEY_ENV = "ENCRYPTED_LOGICAL_KEY";
+    private static final String IV_ENV = "ENCRYPTED_LOGICAL_IV";
+    private static final byte[] DEFAULT_KEY = "MySecretKey123456".getBytes(StandardCharsets.UTF_8);
     private static final byte[] DEFAULT_IV = "0123456789abcdef".getBytes(StandardCharsets.UTF_8);
-    private static SecretKey secretKey;
-    private static IvParameterSpec iv;
+
+    private final SecretKey secretKey;
+    private final byte[] baseIv;
+    private final SecureRandom random = new SecureRandom();
 
     public EncryptedConversion() {
-        this(DEFAULT_KEY, DEFAULT_IV);
+        this(loadKey(), loadIv());
     }
 
-    public EncryptedConversion(byte[] key, byte[] iv) {
-        this.secretKey = new SecretKeySpec(key, "AES");
-        this.iv = new IvParameterSpec((Arrays.copyOf(iv, 16)));
+    public EncryptedConversion(byte[] key, byte[] ivBytes) {
+        this.secretKey = new SecretKeySpec(normalizeToBlockSize(key), "AES");
+        this.baseIv = normalizeIv(ivBytes);
+    }
+
+    private static byte[] loadKey() {
+        String fromEnv = System.getenv(KEY_ENV);
+        return fromEnv == null || fromEnv.isEmpty() ? DEFAULT_KEY : fromEnv.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static byte[] loadIv() {
+        String fromEnv = System.getenv(IV_ENV);
+        return fromEnv == null || fromEnv.isEmpty() ? DEFAULT_IV : fromEnv.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static byte[] normalizeToBlockSize(byte[] bytes) {
+        // AES expects 16/24/32 byte keys; demo trims or pads to 16 bytes for simplicity
+        return Arrays.copyOf(bytes, 16);
+    }
+
+    private static byte[] normalizeIv(byte[] bytes) {
+        // GCM prefers 12 byte IVs; trim/pad to 12 for the demo
+        return Arrays.copyOf(bytes, GCM_IV_LENGTH);
+    }
+
+    private byte[] nextIv() {
+        byte[] iv = Arrays.copyOf(baseIv, GCM_IV_LENGTH);
+        byte[] rand = new byte[GCM_IV_LENGTH];
+        random.nextBytes(rand);
+        for (int i = 0; i < GCM_IV_LENGTH; i++) {
+            iv[i] = (byte) (iv[i] ^ rand[i]);
+        }
+        return iv;
     }
 
     @Override
@@ -40,53 +74,44 @@ public class EncryptedConversion extends Conversion<CharSequence> {
         return EncryptedLogicalType.ENCRYPTED_LOGICAL_TYPE_NAME;
     }
 
-    public static String encrypt(String plaintext) throws Exception {
-        if(plaintext == null){
+    public String encrypt(String plaintext) throws Exception {
+        if (plaintext == null) {
             return null;
         }
-        System.out.println(secretKey);
-        byte[] new_data = plaintext.getBytes(StandardCharsets.UTF_8);
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getIV());
-        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-        int padding_len = cipher.getBlockSize() - new_data.length % cipher.getBlockSize();
-        byte[] padding = new byte[padding_len];
-        for (int i = 0; i < padding_len; i++) {
-            padding[i] = (byte) padding_len;
-        }
-        byte[] padded_data = new byte[new_data.length + padding_len];
-        System.arraycopy(new_data, 0, padded_data, 0, new_data.length);
-        System.arraycopy(padding, 0, padded_data, new_data.length, padding_len);
-        byte[] encrypted = cipher.doFinal(padded_data);
-        return Base64.getEncoder().encodeToString(encrypted);
+        byte[] ivBytes = nextIv();
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        GCMParameterSpec spec = new GCMParameterSpec(GCM_TAG_LENGTH_BITS, ivBytes);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
+        byte[] encrypted = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+        byte[] combined = new byte[ivBytes.length + encrypted.length];
+        System.arraycopy(ivBytes, 0, combined, 0, ivBytes.length);
+        System.arraycopy(encrypted, 0, combined, ivBytes.length, encrypted.length);
+        return Base64.getEncoder().encodeToString(combined);
     }
 
-    public static String decrypt(String encryptedData) throws Exception {
-        if(encryptedData == null){
+    public String decrypt(String encryptedData) throws Exception {
+        if (encryptedData == null) {
             return null;
         }
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getIV());
-        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
-
-        byte[] encrypted = Base64.getDecoder().decode(encryptedData);
-
-        byte[] decrypted = cipher.doFinal(encrypted);
-
-        int padding_len = decrypted[decrypted.length - 1];
-        byte[] unpadded_data = new byte[decrypted.length - padding_len];
-        System.arraycopy(decrypted, 0, unpadded_data, 0, unpadded_data.length);
-        return new String(unpadded_data, StandardCharsets.UTF_8);
+        byte[] combined = Base64.getDecoder().decode(encryptedData);
+        if (combined.length < GCM_IV_LENGTH) {
+            throw new IllegalArgumentException("Invalid encrypted payload");
+        }
+        byte[] ivBytes = Arrays.copyOfRange(combined, 0, GCM_IV_LENGTH);
+        byte[] cipherBytes = Arrays.copyOfRange(combined, GCM_IV_LENGTH, combined.length);
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        GCMParameterSpec spec = new GCMParameterSpec(GCM_TAG_LENGTH_BITS, ivBytes);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
+        byte[] decrypted = cipher.doFinal(cipherBytes);
+        return new String(decrypted, StandardCharsets.UTF_8);
     }
 
     public String toCharSequence(CharSequence value, Schema schema, LogicalType type) {
         try {
-
-            String encrypted = encrypt(String.valueOf(value));
-            System.out.println("When writing to Avro ToByteBuffer is :" + encrypted.toString());
-            return encrypted;
+            if (value == null) {
+                return null;
+            }
+            return encrypt(String.valueOf(value));
         } catch (Exception e) {
             throw new RuntimeException("Error encrypting value", e);
         }
@@ -95,12 +120,10 @@ public class EncryptedConversion extends Conversion<CharSequence> {
     @Override
     public CharSequence fromCharSequence(CharSequence bytes, Schema schema, LogicalType type) {
         try {
-            System.out.println(bytes);
-            System.out.println(schema);
-            System.out.println(type);
-            String decryptedText = decrypt((String.valueOf(bytes)));
-            System.out.println("When reading from the avro file FromByteBuffer is :" + decryptedText);
-            return decryptedText;
+            if (bytes == null) {
+                return null;
+            }
+            return decrypt(String.valueOf(bytes));
         } catch (Exception e) {
             throw new RuntimeException("Error decrypting value", e);
         }

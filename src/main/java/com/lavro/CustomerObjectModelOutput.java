@@ -12,7 +12,9 @@ import com.retail.CustomerObject.Programs;
 import com.retail.customer.CustomerObjectModel;
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Random;
@@ -21,8 +23,12 @@ import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CustomerObjectModelOutput {
+  private static final Logger log = LoggerFactory.getLogger(CustomerObjectModelOutput.class);
+
   public static void main(String[] args) {
     Faker faker = new Faker();
     Schema customerObjectModelSchema = CustomerObjectModel.getClassSchema();
@@ -48,11 +54,8 @@ public class CustomerObjectModelOutput {
             .setPhoneNumber(faker.phoneNumber().cellPhone())
             .setIsEmployee(faker.bool().toString())
             .setCustomerSource(customerSource)
-            .setCreatedDate(
-                faker.date().between(new Date(2021, Calendar.JANUARY, 1), new Date(2021,
-                    Calendar.DECEMBER, 31)).toInstant())
-            .setUpdatedDate(
-                faker.date().between(new Date(2022, Calendar.JANUARY, 1), new Date(2022, Calendar.DECEMBER, 31)).toInstant())
+            .setCreatedDate(randomInstant(faker, 2021, 1, 1, 2021, 12, 31))
+            .setUpdatedDate(randomInstant(faker, 2022, 1, 1, 2022, 12, 31))
             .build();
         CustomerAddress customerAddress = CustomerAddress.newBuilder()
             .setCustomerId(String.valueOf(customerId))
@@ -64,11 +67,8 @@ public class CustomerObjectModelOutput {
             .setCountry(faker.address().country())
             .setPostalCode(faker.address().zipCode())
             .setCustomerSource(customerSource)
-            .setCreatedDate(
-                faker.date().between(new Date(2021, Calendar.JANUARY, 1), new Date(2021,
-                    Calendar.DECEMBER, 31)).toInstant())
-            .setUpdatedDate(
-                faker.date().between(new Date(2022, Calendar.JANUARY, 1), new Date(2022, Calendar.DECEMBER, 31)).toInstant())
+            .setCreatedDate(randomInstant(faker, 2021, 1, 1, 2021, 12, 31))
+            .setUpdatedDate(randomInstant(faker, 2022, 1, 1, 2022, 12, 31))
             .build();
         CustomerContactPreference customerContactPreference = CustomerContactPreference.newBuilder()
             .setCustomerId(String.valueOf(customerId))
@@ -76,11 +76,8 @@ public class CustomerObjectModelOutput {
             .setPhonePreference(faker.regexify("^(?:Yes|No)$"))
             .setDataRetentionPeriod(faker.regexify("^[0-4]$"))
             .setConsentDetails(faker.regexify("^(?:Yes|No)$"))
-            .setCreatedDate(
-                faker.date().between(new Date(2021, Calendar.JANUARY, 1), new Date(2021, Calendar.DECEMBER, 31)).toInstant())
-            .setUpdatedDate(
-                faker.date().between(new Date(2022, Calendar.JANUARY, 1), new Date(2022,
-                    Calendar.DECEMBER, 31)).toInstant())
+            .setCreatedDate(randomInstant(faker, 2021, 1, 1, 2021, 12, 31))
+            .setUpdatedDate(randomInstant(faker, 2022, 1, 1, 2022, 12, 31))
             .build();
 
         CustomerContentPreference customerContentPreference = CustomerContentPreference.newBuilder()
@@ -93,30 +90,18 @@ public class CustomerObjectModelOutput {
                 ContentPreference.values()[new Random().nextInt(ContentPreference.values().length)])
             .setPhoneFrequency(MarketingFrequency.values()[new Random().nextInt(
                 MarketingFrequency.values().length)])
-            .setCreatedDate(
-                faker.date().between(new Date(2021, Calendar.JANUARY, 1), new Date(2021,
-                    Calendar.DECEMBER, 31)).toInstant())
-            .setUpdatedDate(
-                faker.date().between(new Date(2022, Calendar.JANUARY, 1), new Date(2022,
-                    Calendar.DECEMBER, 31)).toInstant())
+            .setCreatedDate(randomInstant(faker, 2021, 1, 1, 2021, 12, 31))
+            .setUpdatedDate(randomInstant(faker, 2022, 1, 1, 2022, 12, 31))
             .build();
 
         CustomerMemberShip customerMemberShip = CustomerMemberShip.newBuilder()
             .setCustomerId(String.valueOf(customerId))
             .setProgramName(Programs.values()[new Random().nextInt(Programs.values().length)])
             .setProgramId(faker.number().numberBetween(1, 3))
-            .setStartDate(
-                faker.date().between(new Date(2021, Calendar.JANUARY, 1), new Date(2021,
-                    Calendar.DECEMBER, 31)).toInstant())
-            .setEndDate(
-                faker.date().between(new Date(2022, Calendar.JANUARY, 1), new Date(2025,
-                    Calendar.DECEMBER, 31)).toInstant())
-            .setCreatedDate(
-                faker.date().between(new Date(2021, Calendar.JANUARY, 1), new Date(2021,
-                    Calendar.DECEMBER, 31)).toInstant())
-            .setUpdatedDate(
-                faker.date().between(new Date(2022, Calendar.JANUARY, 1), new Date(2022,
-                    Calendar.DECEMBER, 31)).toInstant())
+            .setStartDate(randomInstant(faker, 2021, 1, 1, 2021, 12, 31))
+            .setEndDate(randomInstant(faker, 2022, 1, 1, 2025, 12, 31))
+            .setCreatedDate(randomInstant(faker, 2021, 1, 1, 2021, 12, 31))
+            .setUpdatedDate(randomInstant(faker, 2022, 1, 1, 2022, 12, 31))
             .build();
 
 
@@ -129,13 +114,20 @@ public class CustomerObjectModelOutput {
             .build();
         dataFileWriter.append(customerObjectModel);
       }
-      // Close the file
-      dataFileWriter.close();
-      System.out.println("successfully wrote CustomerObjectModel.avro");
-      System.out.println("*****************************");
+      log.info("Successfully wrote CustomerObjectModel.avro");
     } catch (IOException e) {
       e.printStackTrace();
     }
 
+  }
+
+  private static Instant randomInstant(
+      Faker faker, int startYear, int startMonth, int startDay, int endYear, int endMonth,
+      int endDay) {
+    LocalDate start = LocalDate.of(startYear, startMonth, startDay);
+    LocalDate end = LocalDate.of(endYear, endMonth, endDay);
+    Date startDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    Date endDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    return faker.date().between(startDate, endDate).toInstant();
   }
 }

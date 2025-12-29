@@ -1,35 +1,44 @@
 package com.lavro;
 
-import static com.lavro.EncryptedConversion.encrypt;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.avro.LogicalType;
-import org.apache.avro.Schema;
 import org.junit.jupiter.api.Test;
 
 class EncryptedConversionTest {
 
   @Test
-  public void testEncryptAndDecrypt() {
-    // Mocking a value and schema for testing
-    CharSequence valueToEncrypt = "TestValue";
-    Schema schema = mock(Schema.class);
-    LogicalType logicalType = mock(LogicalType.class);
+  void roundTripWithDefaultKey() {
+    EncryptedConversion conversion = new EncryptedConversion();
+    String plaintext = "TestValue";
 
-    // Creating an instance of EncryptedConversion
-    EncryptedConversion encryptedConversion = new EncryptedConversion();
+    String cipher = conversion.toCharSequence(plaintext, null, null);
+    assertNotNull(cipher);
+    assertNotEquals(plaintext, cipher, "Ciphertext should not equal plaintext");
 
-    // Encrypt the value
-    String encryptedValue = encryptedConversion.toCharSequence(valueToEncrypt, schema, logicalType);
-    assertNotNull(encryptedValue);
-
-    // Decrypt the value
-    CharSequence decryptedValue = encryptedConversion.fromCharSequence(encryptedValue, schema, logicalType);
-    assertNotNull(decryptedValue);
-
-    // Assert that the decrypted value matches the original value
-    assertEquals(valueToEncrypt.toString(), decryptedValue.toString());
+    CharSequence decrypted = conversion.fromCharSequence(cipher, null, null);
+    assertEquals(plaintext, decrypted.toString());
   }
 
+  @Test
+  void roundTripWithCustomKeyAndIv() {
+    byte[] key = "abcdefghijklmnop".getBytes();
+    byte[] iv = "1234567890abcdef".getBytes();
+    EncryptedConversion conversion = new EncryptedConversion(key, iv);
+    String plaintext = "CustomKeyValue";
+
+    String cipher = conversion.toCharSequence(plaintext, null, null);
+    CharSequence decrypted = conversion.fromCharSequence(cipher, null, null);
+
+    assertEquals(plaintext, decrypted.toString());
+  }
+
+  @Test
+  void nullValuesPassThrough() {
+    EncryptedConversion conversion = new EncryptedConversion();
+    assertNull(conversion.toCharSequence(null, null, null));
+    assertNull(conversion.fromCharSequence(null, null, null));
+  }
 }

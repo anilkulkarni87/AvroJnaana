@@ -20,9 +20,10 @@ public class ProducerDemo {
     Faker faker = new Faker();
     log.info("I am a Kafka Producer");
 
-    String bootstrapServers = "127.0.0.1:9092";
-    String SCHEMA_REGISTRY_URL = "http://localhost:8081";
-    String topic = "first_topic";
+    String bootstrapServers = System.getenv().getOrDefault("BOOTSTRAP_SERVERS", "127.0.0.1:9092");
+    String SCHEMA_REGISTRY_URL =
+        System.getenv().getOrDefault("SCHEMA_REGISTRY_URL", "http://localhost:8081");
+    String topic = System.getenv().getOrDefault("TOPIC", "first_topic");
 
     //create Producer properties
     Properties properties = new Properties();

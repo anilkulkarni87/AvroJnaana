@@ -19,9 +19,11 @@ public class ConsumerDemo {
   private static final Logger log = LoggerFactory.getLogger(ConsumerDemo.class);
 
   public static void main(String[] args) {
-    String bootstrapServers = "127.0.0.1:9092";
-    String groupId = "my-fourth-application";
-    String topic = "first_topic";
+    String bootstrapServers = System.getenv().getOrDefault("BOOTSTRAP_SERVERS", "127.0.0.1:9092");
+    String groupId = System.getenv().getOrDefault("GROUP_ID", "avro-demo-consumer");
+    String topic = System.getenv().getOrDefault("TOPIC", "first_topic");
+    String schemaRegistryUrl =
+        System.getenv().getOrDefault("SCHEMA_REGISTRY_URL", "http://localhost:8081");
 
     // create consumer configs
     Properties properties = new Properties();
@@ -33,7 +35,7 @@ public class ConsumerDemo {
         KafkaAvroDeserializer.class.getName());
     properties.setProperty("specific.avro.reader", "true");
     properties.setProperty(KafkaAvroSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG,
-        "http://localhost:8081");
+        schemaRegistryUrl);
     properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
     properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
     KafkaConsumer<String, QueryRecord> consumer = new KafkaConsumer<>(properties);

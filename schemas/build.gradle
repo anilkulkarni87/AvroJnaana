@@ -79,6 +79,10 @@ avro {
     customConversionClassNames.add("com.lavro.ReversedConversion")
     logicalTypeFactoryClassNames.put("encrypted", "com.lavro.EncryptedLogicalTypeFactory")
     customConversionClassNames.add("com.lavro.EncryptedConversion")
+    logicalTypeFactoryClassNames.put("email_lower", "com.lavro.EmailLowercaseLogicalTypeFactory")
+    customConversionClassNames.add("com.lavro.EmailLowercaseConversion")
+    logicalTypeFactoryClassNames.put("phone_normalized", "com.lavro.PhoneNormalizedLogicalTypeFactory")
+    customConversionClassNames.add("com.lavro.PhoneNormalizedConversion")
 }
 
 jar {
