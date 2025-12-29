@@ -11,6 +11,9 @@
     input[type="text"] { width: 100%; padding: 0.4rem; }
     code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; }
     .pill { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px; background: #eef; margin-right: 0.4rem; font-size: 0.85rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    pre { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.6rem; min-height: 140px; }
+    .btn { display: inline-block; margin-top: 0.5rem; padding: 0.4rem 0.6rem; border: 1px solid #ccc; border-radius: 4px; background: #fff; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -21,12 +24,29 @@
     <h2>QueryRecord</h2>
     <div class="pill">encrypted</div><div class="pill">reversed</div>
     <div class="card">
+      <p style="margin-top:0;">Note: “encrypted” here is demo-only Base64 to visualize change. The Java code uses AES-GCM in the actual conversion.</p>
       <label>Query Author (reversed)</label>
       <input id="author" type="text" value="Ada Lovelace">
       <label>Secret Name (encrypted)</label>
       <input id="secret" type="text" value="my-secret">
       <button onclick="applyQuery()">Apply Logical Types</button>
-      <pre id="queryOutput"></pre>
+      <div class="grid">
+        <div>
+          <strong>Raw</strong>
+          <pre id="queryRaw"></pre>
+          <button class="btn" onclick="downloadJSON('query-raw.json', queryRawCache)">Download</button>
+        </div>
+        <div>
+          <strong>Transformed (logical types applied)</strong>
+          <pre id="queryTransformed"></pre>
+          <button class="btn" onclick="downloadJSON('query-transformed.json', queryTransformedCache)">Download</button>
+        </div>
+        <div>
+          <strong>Decrypted/Reversed</strong>
+          <pre id="queryDecrypted"></pre>
+          <button class="btn" onclick="downloadJSON('query-decrypted.json', queryDecryptedCache)">Download</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -39,11 +59,34 @@
       <label>Phone</label>
       <input id="phone" type="text" value="+1 (555) 123-4567">
       <button onclick="applyContact()">Apply Logical Types</button>
-      <pre id="contactOutput"></pre>
+      <div class="grid">
+        <div>
+          <strong>Raw</strong>
+          <pre id="contactRaw"></pre>
+          <button class="btn" onclick="downloadJSON('contact-raw.json', contactRawCache)">Download</button>
+        </div>
+        <div>
+          <strong>Transformed (logical types applied)</strong>
+          <pre id="contactTransformed"></pre>
+          <button class="btn" onclick="downloadJSON('contact-transformed.json', contactTransformedCache)">Download</button>
+        </div>
+        <div>
+          <strong>Round-trip (logical types reversed)</strong>
+          <pre id="contactDecrypted"></pre>
+          <button class="btn" onclick="downloadJSON('contact-decrypted.json', contactDecryptedCache)">Download</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
+    let queryRawCache = {};
+    let queryTransformedCache = {};
+    let queryDecryptedCache = {};
+    let contactRawCache = {};
+    let contactTransformedCache = {};
+    let contactDecryptedCache = {};
+
     function reversed(val) {
       return val == null ? null : "Reversed" + val;
     }
@@ -66,25 +109,61 @@
     function applyQuery() {
       const author = document.getElementById("author").value;
       const secret = document.getElementById("secret").value;
-      const record = {
+      queryRawCache = {
         queryId: "demo-id",
-        queryAuthor: reversed(author),
-        secretName: encrypt(secret),
+        queryAuthor: author,
+        secretName: secret,
         queryEngine: "demo-engine"
       };
-      document.getElementById("queryOutput").textContent = JSON.stringify(record, null, 2);
+      queryTransformedCache = {
+        queryId: queryRawCache.queryId,
+        queryAuthor: reversed(author),
+        secretName: encrypt(secret),
+        queryEngine: queryRawCache.queryEngine
+      };
+      queryDecryptedCache = {
+        queryId: queryRawCache.queryId,
+        queryAuthor: author,
+        secretName: secret,
+        queryEngine: queryRawCache.queryEngine
+      };
+      document.getElementById("queryRaw").textContent = JSON.stringify(queryRawCache, null, 2);
+      document.getElementById("queryTransformed").textContent = JSON.stringify(queryTransformedCache, null, 2);
+      document.getElementById("queryDecrypted").textContent = JSON.stringify(queryDecryptedCache, null, 2);
     }
 
     function applyContact() {
       const email = document.getElementById("email").value;
       const phone = document.getElementById("phone").value;
-      const record = {
+      contactRawCache = {
+        email: email,
+        phoneNumber: phone
+      };
+      contactTransformedCache = {
         email: emailLower(email),
         phoneNumber: phoneNormalize(phone),
         emailRaw: email,
         phoneRaw: phone
       };
-      document.getElementById("contactOutput").textContent = JSON.stringify(record, null, 2);
+      contactDecryptedCache = {
+        email: email,
+        phoneNumber: phone,
+        emailRaw: email,
+        phoneRaw: phone
+      };
+      document.getElementById("contactRaw").textContent = JSON.stringify(contactRawCache, null, 2);
+      document.getElementById("contactTransformed").textContent = JSON.stringify(contactTransformedCache, null, 2);
+      document.getElementById("contactDecrypted").textContent = JSON.stringify(contactDecryptedCache, null, 2);
+    }
+
+    function downloadJSON(filename, data) {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     applyQuery();

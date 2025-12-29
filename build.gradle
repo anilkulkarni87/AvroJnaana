@@ -120,6 +120,132 @@ tasks.register("runConsumerDocker", JavaExec) {
     environment("GROUP_ID", System.getenv().getOrDefault("GROUP_ID", "avro-docker-consumer"))
 }
 
+tasks.register("newLogicalType") {
+    group = "scaffolding"
+    description = "Scaffold a new logical type/conversion/test. Usage: ./gradlew newLogicalType -Pname=mask"
+    doLast {
+        def name = project.findProperty("name")
+        if (!name) {
+            throw new GradleException("Usage: ./gradlew newLogicalType -Pname=mask")
+        }
+        def className = name[0].toUpperCase() + name.substring(1)
+        def logicalTypeName = name.toLowerCase()
+        def baseDir = file("custom-conversions/src/main/java/com/lavro")
+        def testDir = file("custom-conversions/src/test/java/com/lavro")
+        baseDir.mkdirs()
+        testDir.mkdirs()
+
+        def logicalTypeFile = new File(baseDir, "${className}LogicalType.java")
+        if (!logicalTypeFile.exists()) {
+            logicalTypeFile.text = """package com.lavro;
+
+import org.apache.avro.LogicalType;
+import org.apache.avro.Schema;
+
+public class ${className}LogicalType extends LogicalType {
+    static final ${className}LogicalType INSTANCE = new ${className}LogicalType();
+    public static final String LOGICAL_TYPE_NAME = "${logicalTypeName}";
+
+    public ${className}LogicalType() {
+        super(LOGICAL_TYPE_NAME);
+    }
+
+    @Override
+    public void validate(Schema schema) {
+        super.validate(schema);
+        if (schema.getType() != Schema.Type.STRING) {
+            throw new IllegalArgumentException("Logical type '${logicalTypeName}' must be backed by String");
+        }
+    }
+}
+"""
+        }
+
+        def factoryFile = new File(baseDir, "${className}LogicalTypeFactory.java")
+        if (!factoryFile.exists()) {
+            factoryFile.text = """package com.lavro;
+
+import org.apache.avro.LogicalType;
+import org.apache.avro.LogicalTypes;
+import org.apache.avro.Schema;
+
+public class ${className}LogicalTypeFactory implements LogicalTypes.LogicalTypeFactory {
+    @Override
+    public LogicalType fromSchema(Schema schema) {
+        return ${className}LogicalType.INSTANCE;
+    }
+}
+"""
+        }
+
+        def conversionFile = new File(baseDir, "${className}Conversion.java")
+        if (!conversionFile.exists()) {
+            conversionFile.text = """package com.lavro;
+
+import org.apache.avro.Conversion;
+import org.apache.avro.LogicalType;
+import org.apache.avro.Schema;
+
+public class ${className}Conversion extends Conversion<CharSequence> {
+    @Override
+    public Class<CharSequence> getConvertedType() {
+        return CharSequence.class;
+    }
+
+    @Override
+    public String getLogicalTypeName() {
+        return ${className}LogicalType.LOGICAL_TYPE_NAME;
+    }
+
+    @Override
+    public CharSequence toCharSequence(CharSequence value, Schema schema, LogicalType type) {
+        // TODO: implement transformation
+        return value;
+    }
+
+    @Override
+    public CharSequence fromCharSequence(CharSequence value, Schema schema, LogicalType type) {
+        // TODO: implement reverse transformation
+        return value;
+    }
+}
+"""
+        }
+
+        def testFile = new File(testDir, "${className}ConversionTest.java")
+        if (!testFile.exists()) {
+            testFile.text = """package com.lavro;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.Test;
+
+class ${className}ConversionTest {
+
+  @Test
+  void roundTrip() {
+    ${className}Conversion conversion = new ${className}Conversion();
+    String input = "sample";
+    CharSequence stored = conversion.toCharSequence(input, null, null);
+    CharSequence read = conversion.fromCharSequence(stored, null, null);
+    assertEquals(input, read.toString());
+  }
+
+  @Test
+  void nullPassThrough() {
+    ${className}Conversion conversion = new ${className}Conversion();
+    assertNull(conversion.toCharSequence(null, null, null));
+    assertNull(conversion.fromCharSequence(null, null, null));
+  }
+}
+"""
+        }
+
+        println "Scaffolded logical type '${logicalTypeName}'. Remember to register it in schemas/build.gradle (logicalTypeFactoryClassNames/customConversionClassNames) and add any schema usage."
+    }
+}
+
 tasks.register("schemaDiff") {
     group = "verification"
     description = "Check compatibility between two Avro schemas. Usage: ./gradlew schemaDiff -Pold=path -Pnew=path"

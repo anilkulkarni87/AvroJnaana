@@ -21,6 +21,12 @@ The same plugin config sets compatibility to `FULL_TRANSITIVE`. To push compatib
 ```
 If you evolve a schema in `schemas/src/main/avro` and regenerate (`schemas:generateSchema`), this task will fail fast when the change is incompatible.
 
+CLI helper (schemaDiff):
+```bash
+./gradlew schemaDiff -Pold=path/to/old.avsc -Pnew=path/to/new.avsc
+```
+Uses Avro’s compatibility checker and prints readable reasons when incompatible.
+
 Example evolution:
 - Compatible: add an optional field with a default  
   `union {null, string} note = null`
