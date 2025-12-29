@@ -12,6 +12,59 @@ description: Running producers and consumers with transparent Avro logical type 
   </p>
 </div>
 
+<div class="mb-2xl">
+  <h2>The "Magic" Explained</h2>
+  <p>
+    How does the application see Plain Text while Kafka stores Cyphertext? The conversion happens transparently in the Avro Logic Type layer during serialization/deserialization.
+  </p>
+  
+  <div class="card bg-secondary mb-lg">
+    <h3 class="text-center mb-md">Producer Flow (Encryption)</h3>
+    <pre class="mermaid">
+    sequenceDiagram
+        participant App as Application
+        participant Avro as Avro Serializer
+        participant Logic as LogicalType (AES)
+        participant Kafka
+        
+        Note over App, Kafka: Writing a Record
+        
+        App->>Avro: write(QueryRecord)
+        Note right of App: "secret-value"
+        
+        Avro->>Logic: conversion.toCharSequence()
+        Logic->>Logic: Encrypt(value, key)
+        Logic-->>Avro: "encrypted-cyphertext"
+        
+        Avro->>Kafka: Produce Message
+        Note right of Kafka: Stored as Cyphertext
+    </pre>
+  </div>
+
+  <div class="card bg-secondary">
+    <h3 class="text-center mb-md">Consumer Flow (Decryption)</h3>
+    <pre class="mermaid">
+    sequenceDiagram
+        participant Kafka
+        participant Avro as Avro Deserializer
+        participant Logic as LogicalType (AES)
+        participant App as Application
+        
+        Note over Kafka, App: Reading a Record
+        
+        Kafka->>Avro: Consume Message
+        Note right of Kafka: "encrypted-cyphertext"
+        
+        Avro->>Logic: conversion.fromCharSequence()
+        Logic->>Logic: Decrypt(value, key)
+        Logic-->>Avro: "secret-value"
+        
+        Avro->>App: read(QueryRecord)
+        Note right of App: Plain Text restored!
+    </pre>
+  </div>
+</div>
+
 <div class="card mb-2xl">
   <h3>Prerequisites</h3>
   <p class="mb-0">You need a running Kafka cluster. You can use the included Docker Compose file or a local Confluent Platform installation.</p>
