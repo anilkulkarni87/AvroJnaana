@@ -4,6 +4,9 @@
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Java CI with Gradle](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml/badge.svg)](https://github.com/anilkulkarni87/AvroJnaana/actions/workflows/gradle.yml)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/anilkulkarni87/AvroJnaana)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/anilkulkarni87/AvroJnaana/main)
+![GitHub Repo stars](https://img.shields.io/github/stars/anilkulkarni87/AvroJnaana?style=social)
 
 **AvroJnaana** ("Avro Knowledge") is a comprehensive project for mastering Apache Avro custom logical types, schema evolution, and Kafka integration.
 
