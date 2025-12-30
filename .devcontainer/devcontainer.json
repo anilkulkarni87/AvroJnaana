@@ -1,0 +1,28 @@
+{
+  "name": "AvroJnaana Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/java:17",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "enableNonRootDocker": "true"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+        "version": "18"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-gradle",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "bierner.markdown-mermaid"
+      ],
+      "settings": {
+        "java.configuration.updateBuildConfiguration": "automatic"
+      }
+    }
+  },
+  "postCreateCommand": "./gradlew clean build schemas:generateSchema",
+  "remoteUser": "vscode"
+}
