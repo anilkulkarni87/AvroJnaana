@@ -12,6 +12,17 @@ description: Set up AvroJnaana locally or with Docker in 10 minutes
     </p>
   </div>
 
+  <div class="mb-2xl">
+     <div class="card bg-secondary" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+           <h3 style="margin: 0 0 0.5rem 0;">⚡ Skip the Setup</h3>
+           <p style="margin: 0; color: var(--text-secondary);">Launch a pre-configured environment in your browser with Java 17 and Docker ready.</p>
+        </div>
+        <a href="https://codespaces.new/anilkulkarni87/AvroJnaana" class="btn btn-primary" target="_blank">Open in Codespaces</a>
+     </div>
+  </div>
+
+
   <div class="grid grid-2 mb-2xl">
     <div class="card">
       <h3 class="mb-md">Prerequisites</h3>

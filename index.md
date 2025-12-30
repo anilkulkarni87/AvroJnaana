@@ -66,6 +66,7 @@ description: Master Apache Avro integration with Kafka, Schema Registry, and Cus
       <span class="badge">Kafka 3.x</span>
       <span class="badge">Schema Registry</span>
       <span class="badge">Gradle</span>
+      <a href="https://codespaces.new/anilkulkarni87/AvroJnaana" class="badge" style="text-decoration: none; border-color: var(--accent);">⚡ Codespaces Ready</a>
       <span class="badge-warning">Experimental</span>
     </div>
   </div>
