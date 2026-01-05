@@ -38,7 +38,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     - name: Build and generate docs with Gradle
-      uses: gradle/gradle-build-action@87a9a15658c426a54dd469d4fc7dc1a73ca9d4a6
+      uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1
       with:
         arguments: clean build schemas:generateSchema schemas:generateAvroDoc copyAvroSchemas
     - name: Setup Pages
